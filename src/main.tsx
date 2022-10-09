@@ -1,9 +1,16 @@
+import '@fontsource/apfel-grotezk/400.css'
+import '@fontsource/apfel-grotezk/700.css'
+
 import React from 'react'
-import ReactDOM from 'react-dom/client'
+import { ChakraProvider } from '@chakra-ui/react'
+import * as ReactDOM from 'react-dom/client'
 import { App } from './App'
+import { theme } from "./theme";
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
-        <App />
+        <ChakraProvider theme={theme}>
+            <App />
+        </ChakraProvider>
     </React.StrictMode>
 )

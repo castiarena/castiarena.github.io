@@ -10,5 +10,10 @@ export default defineConfig({
                 dir: 'docs'
             }
         }
+    },
+    server: {
+        watch: {
+            usePolling: true,
+        },
     }
 })
