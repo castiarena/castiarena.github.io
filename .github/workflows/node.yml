@@ -34,4 +34,3 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./dist
         keep_files: true
-        allow_empty_commit: true
