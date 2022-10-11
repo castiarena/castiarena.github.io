@@ -1,14 +1,26 @@
-import {Box, Heading, Text, useColorMode} from "@chakra-ui/react";
+import {Avatar, Box, Heading, HStack, Link, Text, VStack} from "@chakra-ui/react";
+import { Layout } from "./Layout";
+import face from './face.jpg'
 
 export const App = () => {
-
-    const { colorMode } = useColorMode()
-
     return (
-        <Box bg={'brand.600'} h={'100vh'}>
-            <Text>{colorMode}</Text>
-            <Heading>Portfolio hello world</Heading>
-            <Text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus animi commodi consequatur, corporis debitis explicabo illo iste maiores maxime molestias nobis porro possimus qui sequi ullam ut voluptatem. Dolorum, ea!</Text>
-        </Box>
+        <Layout>
+            <HStack spacing={12}>
+                <Avatar src={face} boxSize={230}/>
+                <VStack spacing={1} alignItems={"flex-start"}>
+                    <Heading mb={4}>Agustin Castiarena</Heading>
+                    <Heading size="md">Frontend Team Lead</Heading>
+                    <Link href="linkedin.com/in/agustin-castiarena" target="_blank">
+                        linkedin.com/in/agustin-castiarena
+                    </Link>
+                    <Link href="mailto:castiarena@gmail.com" target="_blank">
+                        castiarena@gmail.com
+                    </Link>
+                    <Link href="https://www.google.com.ar/maps/@41.3988958,2.1813664,13.24z" target="_blank">
+                        Barcelona - Spain
+                    </Link>
+                </VStack>
+            </HStack>
+        </Layout>
     )
 }
