@@ -5,8 +5,10 @@ import face from './face.jpg'
 export const App = () => {
     return (
         <Layout>
-            <HStack spacing={12}>
-                <Avatar src={face} boxSize={230}/>
+            <HStack spacing={[1, 6, 12]} flexDirection={["column","column", "row"]}>
+                <VStack>
+                    <Avatar src={face} boxSize={[120, 200, 230]}/>
+                </VStack>
                 <VStack spacing={1} alignItems={"flex-start"}>
                     <Heading mb={4}>Agustin Castiarena</Heading>
                     <Heading size="md">Frontend Team Lead</Heading>
