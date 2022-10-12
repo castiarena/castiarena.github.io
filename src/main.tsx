@@ -9,9 +9,7 @@ import { App } from './App'
 import { theme } from "./theme";
 
 initialize('UA-40596528-1')
-pageview(
-    `${window.location.pathname}${window.location.search}`
-);
+pageview(`${window.location.pathname}${window.location.search}`)
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
