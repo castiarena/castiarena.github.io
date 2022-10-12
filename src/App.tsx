@@ -1,4 +1,4 @@
-import {Avatar, Box, Heading, HStack, Link, Text, VStack} from "@chakra-ui/react";
+import {Avatar, Box, Button, Heading, HStack, Link, Text, VStack} from "@chakra-ui/react";
 import { Layout } from "./Layout";
 import face from './face.jpg'
 
@@ -7,14 +7,19 @@ export const App = () => {
         <Layout>
             <HStack spacing={[1, 6, 12]} flexDirection={["column","column", "row"]}>
                 <VStack>
-                    <Avatar src={face} boxSize={[120, 200, 230]}/>
+                    <Avatar
+                        src={face}
+                        boxSize={[120, 200, 230]}
+                        name="Agustin Castiarena"
+                        mb={[6, 8,0]}
+                    />
                 </VStack>
                 <VStack spacing={1} alignItems={"flex-start"}>
                     <Heading mb={4}>Agustin Castiarena</Heading>
                     <Heading size="md">Frontend Team Lead</Heading>
-                    <Link href="linkedin.com/in/agustin-castiarena" target="_blank">
+                    <Button variant={'link'} as={'a'}  href="https://linkedin.com/in/agustin-castiarena" target="_blank">
                         linkedin.com/in/agustin-castiarena
-                    </Link>
+                    </Button>
                     <Link href="mailto:castiarena@gmail.com" target="_blank">
                         castiarena@gmail.com
                     </Link>
