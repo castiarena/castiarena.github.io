@@ -1,69 +1,83 @@
-import {Avatar, Button, Heading, HStack, Link, Text, VStack} from "@chakra-ui/react";
-import {ChatIcon, DownloadIcon, EmailIcon, StarIcon} from "@chakra-ui/icons";
-import { Layout } from "./Layout";
+import { event } from 'react-ga'
+import { Avatar, Button, Heading, HStack, VStack } from '@chakra-ui/react'
+import { ChatIcon, DownloadIcon, EmailIcon, StarIcon } from '@chakra-ui/icons'
+import { Layout } from './Layout'
 import face from './face.jpg'
 import cv from './curriculum-vitae.pdf'
 
 export const App = () => {
-    return (
-        <Layout>
-            <HStack spacing={[1, 6, 12]} flexDirection={["column","column", "row"]}>
-                <VStack>
-                    <Avatar
-                        src={face}
-                        size="2xl"
-                        boxSize={[120, 200, 230]}
-                        name="Agustin Castiarena"
-                        mb={[6, 8,0]}
-                    />
-                </VStack>
-                <VStack spacing={2} alignItems={["center","center","flex-start"]}>
-                    <Heading mb={4}>Agustin Castiarena</Heading>
-                    <Heading size="md">Frontend Team Lead</Heading>
+  const handleOnClickDownload = () => {
+    event({
+      category: 'download',
+      action: 'CV-Downloaded',
+    })
+  }
 
-                    <Button
-                        leftIcon={
-                        <ChatIcon
-                            color={"blue.400"}
-                        />
-                    }
-                        variant={'link'}
-                        size={'sm'}
-                        as={'a'}
-                        href="https://linkedin.com/in/agustin-castiarena"
-                        target="_blank">
-                        linkedin.com/in/agustin-castiarena
-                    </Button>
+  const handleOnClickLinkedin = () => {
+    event({
+      category: 'redirect',
+      action: 'linkedin',
+    })
+  }
 
-                    <Button
-                        variant={'link'}
-                        as={'a'}
-                        leftIcon={<EmailIcon color={'orangered'}/>}
-                        size={'sm'}
-                        href="mailto:castiarena@gmail.com"
-                        target="_blank">
-                        castiarena@gmail.com
-                    </Button>
-                    <Button
-                        variant={'link'}
-                        as={'a'}
-                        size={'sm'}
-                        leftIcon={<StarIcon color={'green'}/>}
-                        href="https://www.google.com.ar/maps/@41.3988958,2.1813664,13.24z"
-                        target="_blank">
-                        Barcelona - Spain
-                    </Button>
-                    <Button
-                        as={'a'}
-                        variant={'link'}
-                        size={'sm'}
-                        leftIcon={<DownloadIcon color={'teal'}/>}
-                        download={'Agustin Castiarena - resume.pdf'}
-                        href={cv}>
-                        Download resume
-                    </Button>
-                </VStack>
-            </HStack>
-        </Layout>
-    )
+  return (
+    <Layout>
+      <HStack flexDirection={['column', 'column', 'row']} spacing={[1, 6, 12]}>
+        <VStack>
+          <Avatar
+            boxSize={[120, 200, 230]}
+            mb={[6, 8, 0]}
+            name="Agustin Castiarena"
+            size="lg"
+            src={face}
+          />
+        </VStack>
+
+        <VStack alignItems={['center', 'center', 'flex-start']} spacing={2}>
+          <Heading mb={4}>Agustin Castiarena</Heading>
+          <Heading size="md">Frontend Team Lead</Heading>
+
+          <Button
+            as="a"
+            href="https://linkedin.com/in/agustin-castiarena"
+            leftIcon={<ChatIcon color="blue.400" />}
+            onClick={handleOnClickLinkedin}
+            size="sm"
+            target="_blank"
+            variant="link">
+            linkedin.com/in/agustin-castiarena
+          </Button>
+
+          <Button
+            as="a"
+            href="mailto:castiarena@gmail.com"
+            leftIcon={<EmailIcon color="orangered" />}
+            size="sm"
+            target="_blank"
+            variant="link">
+            castiarena@gmail.com
+          </Button>
+          <Button
+            as="a"
+            href="https://www.google.com.ar/maps/@41.3988958,2.1813664,13.24z"
+            leftIcon={<StarIcon color="green" />}
+            size="sm"
+            target="_blank"
+            variant="link">
+            Barcelona - Spain
+          </Button>
+          <Button
+            as="a"
+            download="Agustin Castiarena - resume.pdf"
+            href={cv}
+            leftIcon={<DownloadIcon color="teal" />}
+            onClick={handleOnClickDownload}
+            size="sm"
+            variant="link">
+            Download resume
+          </Button>
+        </VStack>
+      </HStack>
+    </Layout>
+  )
 }
