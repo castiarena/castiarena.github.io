@@ -1,4 +1,4 @@
-import { event } from 'react-ga'
+import ReactGA from 'react-ga4'
 import { Avatar, Button, Heading, HStack, VStack } from '@chakra-ui/react'
 import { ChatIcon, DownloadIcon, EmailIcon, StarIcon } from '@chakra-ui/icons'
 import { Layout } from '../../Layout'
@@ -7,14 +7,14 @@ import cv from '../../assets/curriculum-vitae.pdf'
 
 export const Cv = () => {
   const handleOnClickDownload = () => {
-    event({
+    ReactGA.event({
       category: 'download',
       action: 'CV-Downloaded',
     })
   }
 
   const handleOnClickLinkedin = () => {
-    event({
+    ReactGA.event({
       category: 'redirect',
       action: 'linkedin',
     })
