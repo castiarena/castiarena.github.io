@@ -11,7 +11,8 @@
     "test": "vitest",
     "e2e": "playwright test",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "verify:export": "node scripts/verify-export.mjs"
   },
   "dependencies": {
     "clsx": "^2.1.1",
