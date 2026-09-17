@@ -1,19 +1,40 @@
-import type { ReactNode } from 'react'
+import type { ComponentPropsWithoutRef, ReactNode } from 'react'
+import { ArrowUpRight } from 'lucide-react'
 
-export interface ExternalLinkProps {
+import { cn } from '@/lib/utils'
+
+export interface ExternalLinkProps extends Omit<
+  ComponentPropsWithoutRef<'a'>,
+  'href' | 'children' | 'className' | 'target' | 'rel'
+> {
   href: string
   children: ReactNode
   className?: string
   showIcon?: boolean
 }
 
-// STUB — implemented by agent 1.1
-export function ExternalLink({ href, children, className, showIcon = true }: ExternalLinkProps) {
+/** Link that opens in a new tab with safe `rel`, an arrow icon and screen-reader context. */
+export function ExternalLink({
+  href,
+  children,
+  className,
+  showIcon = true,
+  ...props
+}: ExternalLinkProps) {
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
+    <a
+      {...props}
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={cn(
+        'inline-flex items-center gap-1 underline-offset-4 hover:underline [&>svg]:shrink-0',
+        className,
+      )}
+    >
       {children}
-      {showIcon ? <span aria-hidden="true"> ↗</span> : null}
-      <span className="sr-only"> (opens in new tab)</span>
+      {showIcon ? <ArrowUpRight aria-hidden="true" className="size-[1em]" /> : null}
+      <span className="sr-only"> (opens in a new tab)</span>
     </a>
   )
 }

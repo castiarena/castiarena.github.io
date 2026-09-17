@@ -1,11 +1,13 @@
 import type { ReactNode } from 'react'
 
+import { cn } from '@/lib/utils'
+
 export interface GradientTextProps {
   children: ReactNode
   className?: string
 }
 
-// STUB — implemented by agent 1.1
+/** Inline text filled with the signature brand gradient (`text-signature`). */
 export function GradientText({ children, className }: GradientTextProps) {
-  return <span className={className}>{children}</span>
+  return <span className={cn('text-signature', className)}>{children}</span>
 }
