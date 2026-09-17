@@ -8,7 +8,7 @@ export interface ContainerProps {
   as?: 'div' | 'section' | 'header' | 'footer' | 'nav' | 'article'
 }
 
-// STUB — implemented by agent 1.1
+/** Page-width wrapper: max-w-6xl (72rem), centred, 16px mobile gutter (24px from `sm`). */
 export function Container({ children, className, as: Tag = 'div' }: ContainerProps) {
-  return <Tag className={cn('mx-auto max-w-6xl px-4', className)}>{children}</Tag>
+  return <Tag className={cn('container-page', className)}>{children}</Tag>
 }
