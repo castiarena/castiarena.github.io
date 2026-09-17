@@ -1,2 +1,11 @@
+out
+.next
 node_modules
-yarn.lock
+pnpm-lock.yaml
+docs/plan
+playwright-report
+test-results
+next-env.d.ts
+# Frozen contracts, kept verbatim from docs/plan/02-shared-contracts.md
+src/content/types.ts
+src/config/site.ts
