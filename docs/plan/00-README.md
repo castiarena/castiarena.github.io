@@ -46,6 +46,18 @@ There is also a home page (`/`) that points to all three, and a contact dialog y
 
 ---
 
+## The design build (read this first)
+
+The design was approved after this plan was written: 11 screens in `design-build/reference/portfolio-design.pdf`. **[`design-build/`](./design-build/00-README.md) is now the authoritative source for everything visual** and replaces the UI prompts below:
+
+| Replaced | By |
+|---|---|
+| `1.1 Design system` | `design-build` F1 (tokens) + F2 (primitives & shared) |
+| `1.3 Motion primitives` | `design-build` F3 (motion) |
+| `2.1` – `2.6` (all of wave 2) | `design-build` U1 – U6, plus V1 (visual QA & polish) |
+
+Everything else here still stands: 0.1 bootstrap, 1.2 content, 1.4 CI/CD, and waves 3 and 4 run unchanged (wave 3 starts after V1).
+
 ## Execution waves
 
 Agents in the same wave **run in parallel**. A wave starts only after every PR from the previous wave is merged into `next`.
@@ -125,7 +137,7 @@ done
 wait
 ```
 
-Every prompt file is self-contained: **the whole file is the prompt** (mission, context to load, owned paths, tasks, acceptance criteria, loop rules). The Wave 0 agent copies this `plan/` folder into the repo at `docs/plan/`, so every later agent can read it. For Wave 0 itself, run the agent from this `portfolio/` folder so it can find `plan/`.
+Every prompt file is self-contained: **the whole file is the prompt** (mission, context to load, owned paths, tasks, acceptance criteria, loop rules). The Wave 0 agent copies this `docs/plan/` folder into the repo at `docs/plan/`, so every later agent can read it. For Wave 0 itself, run the agent from this `portfolio/` folder so it can find `docs/plan/`.
 
 ### Gate between waves (you or an orchestrator agent)
 
