@@ -124,7 +124,26 @@ stub's props are wrong for the design, raise a CCR, do not silently change the s
 
 ---
 
-## 6. Order of play from here
+## 6. Local environment — read before you debug a build error
+
+**Node must be the `.nvmrc` version (24).** Under an older Node, `pnpm install` resolves the wrong
+native bindings and the failure surfaces much later as
+
+```
+Error: Cannot find native binding … Cannot find module '@rolldown/binding-wasm32-wasi'
+```
+
+from `pnpm test`, which looks like a broken dependency and is not. `scripts/agents/wave.sh` pins the
+version before it installs anything, but if you install by hand in a worktree, run `nvm use` first.
+If you hit that error, `rm -rf node_modules && pnpm install --frozen-lockfile` on Node 24 fixes it.
+
+The gate passes on a clean worktree today (105 unit tests, `next build` → 12 static HTML files,
+`verify-export` 9 passed / 0 errors). Its two warnings — no `sitemap.xml`, no `robots.txt` — are
+expected: 3.1 adds them in wave 3, and `VERIFY_STRICT=1` is only flipped on then.
+
+---
+
+## 7. Order of play from here
 
 ```
   ┌ F1 tokens ┐

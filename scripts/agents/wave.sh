@@ -8,7 +8,7 @@
 #   scripts/agents/wave.sh status     foundations   # branch / PR / AGENT_RESULT per agent
 #   scripts/agents/wave.sh cleanup    foundations   # remove the worktrees (branches are kept)
 #
-# Waves are declared in WAVES below. Agents inside one wave run at the same time and must
+# Waves are declared in wave_agents() below. Agents inside one wave run at the same time and must
 # never share a working copy — that is what the worktrees are for.
 #
 # Logs land in .agents/logs/<id>.log; the last line of each is the agent's AGENT_RESULT.
@@ -69,6 +69,33 @@ EOF
 branch_of() { echo "agent/$1"; }
 worktree_of() { echo "$WT_ROOT/wt-$1"; }
 
+# Put the .nvmrc Node on PATH. Installing or building under an older Node silently resolves the
+# wrong native bindings (rolldown ships per-platform binaries), and the agent then debugs a
+# "Cannot find native binding" error that is really a version problem.
+use_project_node() {
+  local want current
+  want="$(cat "$REPO_ROOT/.nvmrc")"
+  current="$(node -v 2>/dev/null || echo none)"
+  case "$current" in v"$want".*) return 0 ;; esac
+  if [ -s "${NVM_DIR:-$HOME/.nvm}/nvm.sh" ]; then
+    # shellcheck disable=SC1091
+    . "${NVM_DIR:-$HOME/.nvm}/nvm.sh"
+    nvm use "$want" >/dev/null 2>&1 || nvm install "$want" >/dev/null
+  fi
+  current="$(node -v 2>/dev/null || echo none)"
+  case "$current" in
+    v"$want".*) echo "· node $current" ;;
+    *) echo "✗ node $want required (.nvmrc), found $current — install it or fix your PATH" >&2; exit 1 ;;
+  esac
+}
+
+install_deps() {
+  local wt="$1" id="$2"
+  [ -d "$wt/node_modules" ] && return 0
+  echo "· $id  pnpm install"
+  (cd "$wt" && pnpm install --frozen-lockfile >/dev/null)
+}
+
 cmd_plan() {
   local wave="$1"
   printf '%-5s %-28s %s\n' AGENT WORKTREE PROMPT
@@ -81,6 +108,7 @@ cmd_plan() {
 
 cmd_setup() {
   local wave="$1"
+  use_project_node
   git -C "$REPO_ROOT" fetch origin
   while read -r id prompt; do
     local branch wt
@@ -88,14 +116,14 @@ cmd_setup() {
     wt="$(worktree_of "$id")"
     if [ -d "$wt" ]; then
       echo "· $id  worktree exists: $wt"
-      continue
-    fi
-    if git -C "$REPO_ROOT" show-ref --verify --quiet "refs/heads/$branch"; then
+    elif git -C "$REPO_ROOT" show-ref --verify --quiet "refs/heads/$branch"; then
       git -C "$REPO_ROOT" worktree add "$wt" "$branch"
+      echo "✓ $id  $branch → $wt"
     else
       git -C "$REPO_ROOT" worktree add "$wt" -b "$branch" "origin/$BASE_BRANCH"
+      echo "✓ $id  $branch → $wt"
     fi
-    echo "✓ $id  $branch → $wt"
+    install_deps "$wt" "$id"
   done < <(wave_agents "$wave")
 }
 
@@ -130,7 +158,7 @@ cmd_status() {
     branch="$(branch_of "$id")"
     wt="$(worktree_of "$id")"
     pr="$(gh pr list --head "$branch" --state all --json number,state \
-          --jq '.[0] | "#\(.number) \(.state)"' 2>/dev/null || true)"
+          --jq 'if length == 0 then "" else "#\(.[0].number) \(.[0].state)" end' 2>/dev/null || true)"
     result="$(grep -h '^AGENT_RESULT' "$LOG_DIR/$id.log" 2>/dev/null | tail -1 || true)"
     printf '%-5s %-34s %-14s %s\n' "$id" "$branch" "${pr:-no PR}" "${result:-${wt:+no result yet}}"
   done < <(wave_agents "$wave")
