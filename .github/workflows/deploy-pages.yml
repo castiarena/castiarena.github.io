@@ -1,0 +1,62 @@
+# Production deploy of the static export to GitHub Pages (https://castiarena.github.io).
+# Runs on push to `main` only, or manually (Actions -> deploy-pages -> Run workflow) with an
+# optional `ref` to roll back to a previous SHA or tag. Never runs on PRs.
+# Requires Settings -> Pages -> Source = "GitHub Actions" (done at cutover, docs/DEPLOYMENT.md).
+name: deploy-pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Git ref to deploy (for rollback), default = main'
+        required: false
+        type: string
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.ref || github.ref }}
+      - uses: pnpm/action-setup@v6 # version comes from package.json "packageManager"
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+        env:
+          NEXT_PUBLIC_SITE_URL: https://castiarena.github.io
+          NEXT_PUBLIC_DEPLOY_ENV: production
+          NEXT_PUBLIC_FORM_ENDPOINT: ${{ vars.NEXT_PUBLIC_FORM_ENDPOINT }}
+      - run: touch out/.nojekyll && node scripts/verify-export.mjs
+        env:
+          VERIFY_STRICT: '0' # agent 3.1 flips this to '1' once sitemap.xml/robots.txt exist
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: out
+          include-hidden-files: true # ship out/.nojekyll
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

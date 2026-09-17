@@ -1,6 +1,13 @@
 import { experiments } from './experiments'
 import { projects } from './projects'
+import { validateContent } from './schema'
 import type { Experiment, Project } from './types'
+
+// Fail `next build` / `next dev` on invalid content instead of shipping it. Skipped under Vitest,
+// where tests mock content modules with partial fixtures and validate explicitly instead.
+if (process.env.NODE_ENV !== 'test') {
+  validateContent()
+}
 
 export { profile } from './profile'
 export { experiences } from './experience'
