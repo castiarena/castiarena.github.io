@@ -154,13 +154,24 @@ cmd_launch() {
 cmd_status() {
   local wave="$1"
   while read -r id prompt; do
-    local branch wt pr result
+    local branch pr log result state
     branch="$(branch_of "$id")"
-    wt="$(worktree_of "$id")"
+    log="$LOG_DIR/$id.log"
     pr="$(gh pr list --head "$branch" --state all --json number,state \
           --jq 'if length == 0 then "" else "#\(.[0].number) \(.[0].state)" end' 2>/dev/null || true)"
-    result="$(grep -h '^AGENT_RESULT' "$LOG_DIR/$id.log" 2>/dev/null | tail -1 || true)"
-    printf '%-5s %-34s %-14s %s\n' "$id" "$branch" "${pr:-no PR}" "${result:-${wt:+no result yet}}"
+    result="$(grep -h '^AGENT_RESULT' "$log" 2>/dev/null | tail -1 || true)"
+    if [ -n "$result" ]; then
+      state="$result"
+    elif [ ! -s "$log" ]; then
+      state="not started"
+    elif pgrep -f "wt-$id" >/dev/null 2>&1; then
+      state="running ($(wc -l <"$log" | tr -d ' ') lines)"
+    else
+      # Exited without a result line. Headless agents do this when they hit a
+      # permission prompt nobody can answer — the last line says which tool.
+      state="STALLED: $(tail -1 "$log" | cut -c1-70)"
+    fi
+    printf '%-5s %-12s %-14s %s\n' "$id" "$branch" "${pr:-no PR}" "$state"
   done < <(wave_agents "$wave")
 }
 

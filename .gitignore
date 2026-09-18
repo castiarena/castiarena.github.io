@@ -49,3 +49,6 @@ test-results/
 
 # agent orchestration logs
 /.agents/
+
+# personal Claude Code overrides
+.claude/settings.local.json
