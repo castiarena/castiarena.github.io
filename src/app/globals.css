@@ -1,0 +1,189 @@
+/*
+ * Design tokens — owned by agent 1.1.
+ * Colours are OKLCH only (no hex / rgb). Contrast is enforced by tests/unit/shared/contrast.test.ts.
+ * Dark is the default theme (01 §4); `.dark` is toggled on <html> by next-themes (class strategy).
+ */
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@custom-variant dark (&:is(.dark *));
+
+/* ---------------------------------------------------------------- light */
+/* `.light` lets a subtree force the light palette inside a dark page (style guide swatches). */
+:root,
+.light {
+  --background: oklch(0.99 0.002 260);
+  --foreground: oklch(0.17 0.015 260);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.17 0.015 260);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.17 0.015 260);
+  --primary: oklch(0.52 0.19 258);
+  --primary-foreground: oklch(0.99 0.002 260);
+  --secondary: oklch(0.96 0.006 260);
+  --secondary-foreground: oklch(0.22 0.015 260);
+  --muted: oklch(0.96 0.006 260);
+  --muted-foreground: oklch(0.5 0.02 260);
+  --accent: oklch(0.95 0.02 255);
+  --accent-foreground: oklch(0.22 0.02 260);
+  --destructive: oklch(0.5 0.2 27);
+  --border: oklch(0.91 0.008 260);
+  --input: oklch(0.91 0.008 260);
+  --ring: oklch(0.52 0.19 258);
+  --radius: 0.625rem;
+
+  /* Brand — deepened for legibility on a light background */
+  --brand: oklch(0.52 0.19 258);
+  --brand-2: oklch(0.56 0.11 200);
+  --brand-3: oklch(0.52 0.22 305);
+  --brand-foreground: oklch(0.99 0.002 260);
+}
+
+/* ----------------------------------------------------------------- dark */
+.dark {
+  color-scheme: dark;
+
+  --background: oklch(0.155 0.014 262);
+  --foreground: oklch(0.96 0.005 260);
+  --card: oklch(0.2 0.015 262);
+  --card-foreground: oklch(0.96 0.005 260);
+  --popover: oklch(0.2 0.015 262);
+  --popover-foreground: oklch(0.96 0.005 260);
+  --primary: oklch(0.7 0.15 256);
+  --primary-foreground: oklch(0.155 0.014 262);
+  --secondary: oklch(0.25 0.016 262);
+  --secondary-foreground: oklch(0.96 0.005 260);
+  --muted: oklch(0.25 0.016 262);
+  --muted-foreground: oklch(0.72 0.02 260);
+  --accent: oklch(0.27 0.03 258);
+  --accent-foreground: oklch(0.96 0.005 260);
+  --destructive: oklch(0.7 0.19 22);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.63 0.19 256);
+
+  /* Brand — exact values from 01 §4 */
+  --brand: oklch(0.63 0.19 256);
+  --brand-2: oklch(0.72 0.17 195);
+  --brand-3: oklch(0.66 0.24 305);
+  --brand-foreground: oklch(0.155 0.014 262);
+}
+
+.light {
+  color-scheme: light;
+}
+
+/* ---------------------------------------------------- theme → utilities */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-brand: var(--brand);
+  --color-brand-2: var(--brand-2);
+  --color-brand-3: var(--brand-3);
+  --color-brand-foreground: var(--brand-foreground);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-heading: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/* Fluid type scale → `text-display`, `text-h1`, `text-h2` */
+@theme {
+  --text-display: clamp(2.75rem, 1.6rem + 5vw, 5rem);
+  --text-display--line-height: 1.02;
+  --text-display--letter-spacing: -0.035em;
+  --text-h1: clamp(2.25rem, 1.6rem + 3vw, 3.5rem);
+  --text-h1--line-height: 1.08;
+  --text-h1--letter-spacing: -0.025em;
+  --text-h2: clamp(1.5rem, 1.2rem + 1.5vw, 2.25rem);
+  --text-h2--line-height: 1.2;
+  --text-h2--letter-spacing: -0.015em;
+}
+
+/* ------------------------------------------------------------ utilities */
+@utility bg-signature {
+  background-image: linear-gradient(in oklch 120deg, var(--brand), var(--brand-2), var(--brand-3));
+}
+
+@utility text-signature {
+  background-image: linear-gradient(in oklch 120deg, var(--brand), var(--brand-2), var(--brand-3));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+
+  @media (forced-colors: active) {
+    background-image: none;
+    color: CanvasText;
+    -webkit-text-fill-color: CanvasText;
+  }
+}
+
+@utility container-page {
+  @apply mx-auto w-full max-w-6xl px-4 sm:px-6;
+}
+
+/* ----------------------------------------------------------------- base */
+@layer base {
+  html {
+    color-scheme: light dark;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: color-mix(in oklch, var(--brand) 30%, transparent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
