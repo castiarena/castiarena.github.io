@@ -8,7 +8,8 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        default: 'border-transparent bg-primary text-primary-foreground [a]:hover:bg-primary/80',
+        /** Base badge (02 "Badge / TagList"): muted fill, border hairline. */
+        default: 'border-border bg-muted text-foreground [a]:hover:bg-muted/70',
         secondary: 'border-border bg-muted text-foreground [a]:hover:bg-muted/70',
         /** Leadership / featured tags (02 "Team Lead"): brand at 15% fill, brand text, brand at 35% border. */
         brand: 'border-brand/35 bg-brand/15 text-brand [a]:hover:bg-brand/20',
@@ -17,7 +18,7 @@ const badgeVariants = cva(
         outline: 'border-border text-foreground [a]:hover:bg-muted [a]:hover:text-muted-foreground',
         ghost:
           'border-transparent hover:bg-muted hover:text-muted-foreground dark:hover:bg-muted/50',
-        link: 'border-transparent text-primary underline-offset-4 hover:underline',
+        link: 'border-transparent text-brand underline-offset-4 hover:underline',
       },
     },
     defaultVariants: {
