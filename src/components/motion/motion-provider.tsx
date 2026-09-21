@@ -3,7 +3,7 @@
 import { LazyMotion, MotionConfig } from 'motion/react'
 import type { ReactNode } from 'react'
 
-import { MOTION_DURATION, MOTION_EASE } from './shared'
+import { MOTION_DURATION_REVEAL, MOTION_EASE } from './shared'
 
 const loadFeatures = () => import('./features').then((mod) => mod.domAnimation)
 
@@ -21,7 +21,7 @@ export function MotionProvider({ children }: MotionProviderProps) {
   return (
     <MotionConfig
       reducedMotion="user"
-      transition={{ duration: MOTION_DURATION, ease: MOTION_EASE }}
+      transition={{ duration: MOTION_DURATION_REVEAL, ease: MOTION_EASE }}
     >
       <LazyMotion features={loadFeatures} strict>
         {children}

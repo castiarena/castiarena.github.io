@@ -3,15 +3,15 @@
 import * as m from 'motion/react-m'
 import type { ReactNode } from 'react'
 
-import { joinClassNames, useMotionAllowed } from './shared'
+import { joinClassNames, MOTION_DURATION_UI, useMotionAllowed } from './shared'
 
 export interface HoverLiftProps {
   children: ReactNode
   className?: string
 }
 
-const hover = { y: -4, transition: { duration: 0.2 } }
-const tap = { scale: 0.98, transition: { duration: 0.1 } }
+const hover = { y: -4, transition: { duration: MOTION_DURATION_UI } }
+const tap = { scale: 0.98, transition: { duration: MOTION_DURATION_UI / 2 } }
 
 /**
  * Lifts its content by 4px on hover and presses it slightly on tap. Keyboard users get the same

@@ -5,3 +5,11 @@ export { CountUp, type CountUpProps } from './count-up'
 export { MotionProvider, type MotionProviderProps } from './motion-provider'
 export { ScrollProgress, type ScrollProgressProps } from './scroll-progress'
 export { ParallaxLayer, type ParallaxLayerProps } from './parallax-layer'
+export {
+  MOTION_DURATION_REVEAL,
+  MOTION_DURATION_UI,
+  MOTION_EASE,
+  NAV_UNDERLINE_LAYOUT_ID,
+  navUnderlineTransition,
+  useMotionAllowed,
+} from './shared'
