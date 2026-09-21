@@ -9,17 +9,24 @@ const css = readFileSync(resolve(process.cwd(), 'src/app/globals.css'), 'utf8').
   '',
 )
 
-/** Collects `--name: value;` declarations from the first rule whose selector matches exactly. */
+/**
+ * Collects `--name: value;` declarations from the first rule whose (comma-separated) selector
+ * list includes the given selector exactly — e.g. `:root` matches `:root, .light { … }`, but not
+ * a later unrelated `:root { … }` (the reduced-motion override).
+ */
 function readTokens(selector: string): Record<string, string> {
-  const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-  const match = new RegExp(`(?:^|\\})\\s*${escaped}\\s*\\{([^}]*)\\}`, 'm').exec(css)
-  if (!match?.[1]) throw new Error(`No rule found for selector "${selector}"`)
-
   const tokens: Record<string, string> = {}
-  for (const [, name, value] of match[1].matchAll(/--([\w-]+)\s*:\s*([^;]+);/g)) {
-    if (name && value) tokens[name] = value.trim()
+  for (const [, selectorList, body] of css.matchAll(/([^;{}]+)\{([^{}]*)\}/gm)) {
+    if (!selectorList || !body) continue
+    const selectors = selectorList.split(',').map((s) => s.trim())
+    if (!selectors.includes(selector)) continue
+
+    for (const [, name, value] of body.matchAll(/--([\w-]+)\s*:\s*([^;]+);/g)) {
+      if (name && value) tokens[name] = value.trim()
+    }
+    return tokens
   }
-  return tokens
+  throw new Error(`No rule found for selector "${selector}"`)
 }
 
 const themes = {

@@ -14,7 +14,9 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ---------------------------------------------------------------- light (default :root) */
-:root {
+/* `.light` lets a subtree force the light palette inside a dark page (style guide swatches). */
+:root,
+.light {
   --background: oklch(1 0 0);
   --card: oklch(0.985 0.002 285);
   --muted: oklch(0.967 0.003 285);
@@ -73,6 +75,10 @@
   /* White (0.99, the spec value) only clears 3.45:1 against this brand fill. Darkened, lightness
      only, to clear 4.5:1 — see 01 §1 note and docs/handoffs/F1.md. */
   --brand-foreground: oklch(0.15 0 0);
+}
+
+.light {
+  color-scheme: light;
 }
 
 /* ---------------------------------------------------- theme → utilities (01 §9) */
