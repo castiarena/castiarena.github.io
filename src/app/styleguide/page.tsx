@@ -49,18 +49,25 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 }
 
+// Only tokens F1's `@theme inline` map actually defines (01-design-tokens.md) — no separate
+// popover/primary/secondary/accent surfaces, and `card` has no `-foreground` pairing of its own.
 const SURFACE_TOKENS = [
   ['background', 'foreground'],
-  ['card', 'card-foreground'],
-  ['popover', 'popover-foreground'],
-  ['primary', 'primary-foreground'],
-  ['secondary', 'secondary-foreground'],
+  ['card', 'foreground'],
   ['muted', 'muted-foreground'],
-  ['accent', 'accent-foreground'],
   ['brand', 'brand-foreground'],
 ] as const
 
-const SINGLE_TOKENS = ['brand-2', 'brand-3', 'destructive', 'border', 'input', 'ring'] as const
+const SINGLE_TOKENS = [
+  'brand-2',
+  'brand-3',
+  'brand-4',
+  'destructive',
+  'warning',
+  'border',
+  'input',
+  'ring',
+] as const
 
 const TYPE_SCALE = [
   { className: 'text-display font-semibold', label: 'text-display', sample: 'Display' },
@@ -154,7 +161,7 @@ function ThemePanel({ theme }: { theme: 'light' | 'dark' }) {
           </li>
         ))}
       </ul>
-      <ul className="grid grid-cols-3 gap-3" aria-label={`${theme} accent tokens`}>
+      <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4" aria-label={`${theme} accent tokens`}>
         {SINGLE_TOKENS.map((token) => (
           <li key={token} className="flex flex-col gap-1.5">
             <span
@@ -180,7 +187,7 @@ export default function StyleguidePage() {
   return (
     <Container className="pb-24">
       <PageHeader
-        eyebrow="Wave 1.1 · shadcn/ui + shared — internal, not indexed"
+        eyebrow="Design build · shadcn/ui + shared — internal, not indexed"
         title="Components"
         description="OKLCH tokens, the fluid type scale, every installed shadcn/ui primitive and the shared components. Reproduces reference/02-components.png section by section. Temporary route for reviewers — deleted before release."
       >
