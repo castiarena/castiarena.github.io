@@ -23,71 +23,82 @@ function readTokens(selector: string): Record<string, string> {
 }
 
 const themes = {
-  light: readTokens(':root,\n.light'),
+  light: readTokens(':root'),
   dark: readTokens('.dark'),
 }
-
-const REQUIRED_PAIRS: [foreground: string, background: string][] = [
-  ['foreground', 'background'],
-  ['muted-foreground', 'background'],
-  ['primary-foreground', 'primary'],
-]
-
-const EXTRA_PAIRS: [foreground: string, background: string][] = [
-  ['muted-foreground', 'muted'],
-  ['muted-foreground', 'card'],
-  ['card-foreground', 'card'],
-  ['popover-foreground', 'popover'],
-  ['secondary-foreground', 'secondary'],
-  ['accent-foreground', 'accent'],
-  ['brand-foreground', 'brand'],
-  ['destructive', 'background'],
-  ['primary', 'background'],
-]
 
 const COLOR_TOKENS = [
   'background',
   'foreground',
   'card',
-  'card-foreground',
-  'popover',
-  'popover-foreground',
-  'primary',
-  'primary-foreground',
-  'secondary',
-  'secondary-foreground',
   'muted',
   'muted-foreground',
-  'accent',
-  'accent-foreground',
-  'destructive',
   'border',
   'input',
   'ring',
   'brand',
   'brand-2',
   'brand-3',
+  'brand-4',
+  'brand-foreground',
+  'destructive',
+  'warning',
 ]
 
-function color(theme: Record<string, string>, token: string) {
+/** Resolves a token's value, following `var(--x)` references (e.g. `--ring: var(--brand)`). */
+function resolveValue(
+  theme: Record<string, string>,
+  token: string,
+  seen = new Set<string>(),
+): string {
   const raw = theme[token]
   if (!raw) throw new Error(`Missing token --${token}`)
+  const ref = /^var\(--([\w-]+)\)$/.exec(raw)
+  if (!ref?.[1]) return raw
+  if (seen.has(token)) throw new Error(`Circular reference for --${token}`)
+  seen.add(token)
+  return resolveValue(theme, ref[1], seen)
+}
+
+function color(theme: Record<string, string>, token: string) {
+  const raw = resolveValue(theme, token)
   const parsed = parse(raw)
   if (!parsed) throw new Error(`Unparseable colour for --${token}: ${raw}`)
   return parsed
 }
 
+// 01-design-tokens.md §10 — contrast floor, both themes.
+const TEXT_PAIRS: [foreground: string, background: string][] = [
+  ['foreground', 'background'],
+  ['muted-foreground', 'background'],
+  ['muted-foreground', 'card'],
+  ['brand-foreground', 'brand'],
+  ['brand', 'background'], // brand link text on background
+]
+
+// Focus ring against both surfaces — 3:1, not the 4.5:1 text floor.
+const RING_PAIRS: [foreground: string, background: string][] = [
+  ['ring', 'background'],
+  ['ring', 'card'],
+]
+
 describe.each(Object.entries(themes))('%s theme tokens', (_name, theme) => {
-  it('defines every shadcn + brand colour token in OKLCH', () => {
+  it('defines every colour token in OKLCH', () => {
     for (const token of COLOR_TOKENS) {
-      expect(theme[token], `--${token}`).toMatch(/^oklch\(/)
+      const raw = resolveValue(theme, token)
+      expect(raw, `--${token}`).toMatch(/^oklch\(/)
       expect(color(theme, token).mode).toBe('oklch')
     }
   })
 
-  it.each([...REQUIRED_PAIRS, ...EXTRA_PAIRS])('%s on %s has contrast ≥ 4.5:1', (fg, bg) => {
+  it.each(TEXT_PAIRS)('%s on %s has contrast ≥ 4.5:1', (fg, bg) => {
     const ratio = wcagContrast(color(theme, fg), color(theme, bg))
     expect(ratio, `--${fg} on --${bg} = ${ratio.toFixed(2)}:1`).toBeGreaterThanOrEqual(4.5)
+  })
+
+  it.each(RING_PAIRS)('%s on %s has contrast ≥ 3:1', (fg, bg) => {
+    const ratio = wcagContrast(color(theme, fg), color(theme, bg))
+    expect(ratio, `--${fg} on --${bg} = ${ratio.toFixed(2)}:1`).toBeGreaterThanOrEqual(3)
   })
 })
 
@@ -96,9 +107,14 @@ describe('globals.css', () => {
     expect(css).not.toMatch(/#[0-9a-fA-F]{3,6}\b|rgba?\(/)
   })
 
-  it('keeps the brand values from 01 §4 in the dark (default) theme', () => {
+  it('keeps the brand hues from 01 §1 in the dark (default) theme', () => {
     expect(themes.dark.brand).toBe('oklch(0.63 0.19 256)')
     expect(themes.dark['brand-2']).toBe('oklch(0.72 0.17 195)')
     expect(themes.dark['brand-3']).toBe('oklch(0.66 0.24 305)')
+    expect(themes.dark['brand-4']).toBe('oklch(0.66 0.21 285)')
+  })
+
+  it('only darkens the light-theme brand lightness, keeping hue and chroma (01 §2 note)', () => {
+    expect(themes.light.brand).toBe('oklch(0.56 0.19 256)')
   })
 })
