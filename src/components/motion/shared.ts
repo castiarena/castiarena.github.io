@@ -8,10 +8,21 @@ import {
   useSyncExternalStore,
 } from 'react'
 
-/** Site-wide easing (easeOutQuint-like). Mirrors the `MotionProvider` default transition. */
+/**
+ * Site-wide easing (easeOutQuint-like). Mirrors the design token `--ease-brand`
+ * (`cubic-bezier(0.22, 1, 0.36, 1)`, `01-design-tokens.md` §6) and the `MotionProvider` default
+ * transition. Kept as a JS constant rather than read from the CSS custom property: Motion's
+ * transition config needs a literal cubic-bezier array (or duration in seconds) at the point an
+ * animation is defined, including during SSR where there is no `getComputedStyle` to read from,
+ * so the token and this constant are two literals that must be kept equal by convention, not by
+ * reference. `tests/unit/motion/budget.test.ts` pins both this value and the durations below so
+ * a drift shows up as a failing test instead of a silent visual mismatch.
+ */
 export const MOTION_EASE = [0.22, 1, 0.36, 1] as const
-/** Reveal duration in seconds (motion budget: ≤ 0.7s for reveals). */
-export const MOTION_DURATION = 0.5
+/** UI interactions — hover, tap, toggle, the nav underline. Mirrors `--dur-ui` (200ms), hard cap 400ms. */
+export const MOTION_DURATION_UI = 0.2
+/** Scroll reveals. Mirrors `--dur-reveal` (500ms), hard cap 700ms. */
+export const MOTION_DURATION_REVEAL = 0.5
 
 const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)'
 
@@ -76,7 +87,7 @@ export const revealVariants: Variants = {
     opacity: 1,
     y: 0,
     transition: {
-      duration: MOTION_DURATION,
+      duration: MOTION_DURATION_REVEAL,
       ease: MOTION_EASE,
       ...(delay ? { delay } : {}),
     },
@@ -84,6 +95,21 @@ export const revealVariants: Variants = {
 }
 
 export const revealViewport = { once: true, amount: 0.2 } as const
+
+/**
+ * `layoutId` shared by every `NavItem`'s active-state underline (`02-component-specs.md`:
+ * "animated between items with a Motion `layoutId`"). Motion animates an element between two
+ * positions only when both instances share a `layoutId`, so this constant must be the same
+ * string everywhere a `NavItem` renders the underline — hence a shared export instead of a
+ * per-page literal.
+ */
+export const NAV_UNDERLINE_LAYOUT_ID = 'nav-active-underline'
+
+/**
+ * Transition for the nav underline's `layoutId` animation. UI-budget, not reveal-budget: it's a
+ * hover/selection-adjacent interaction, not a scroll reveal.
+ */
+export const navUnderlineTransition = { duration: MOTION_DURATION_UI, ease: MOTION_EASE }
 
 /**
  * Hydration-safe reveal switch shared by `Reveal` and `Stagger`.
