@@ -40,7 +40,7 @@ export function PageHeader({
   return (
     <header className={cn('flex flex-col gap-4 py-12 sm:py-16', className)}>
       {eyebrow ? (
-        <p className="font-mono text-xs font-medium tracking-[0.2em] text-muted-foreground uppercase">
+        <p className="font-mono text-xs font-medium tracking-[0.08em] text-muted-foreground uppercase">
           {eyebrow}
         </p>
       ) : null}

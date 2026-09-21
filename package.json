@@ -12,7 +12,9 @@
     "e2e": "playwright test",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "verify:export": "node scripts/verify-export.mjs"
+    "verify:export": "node scripts/verify-export.mjs",
+    "shoot": "node scripts/shoot.mjs",
+    "compare": "node scripts/compare.mjs"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",

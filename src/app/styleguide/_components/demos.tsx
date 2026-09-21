@@ -139,6 +139,29 @@ export function ToggleDemos() {
   )
 }
 
+/**
+ * Illustrates the primitive FilterChip (02 §"FilterChip") is built on: ToggleGroup with a
+ * brand-tinted selected state. The real page-specific FilterChip belongs to U4.
+ */
+export function FilterChipsDemo() {
+  const selectedClass =
+    'data-[state=on]:border-brand/35 data-[state=on]:bg-brand/15 data-[state=on]:text-brand rounded-full font-mono text-xs data-[state=on]:hover:bg-brand/20'
+
+  return (
+    <ToggleGroup type="single" variant="outline" defaultValue="all" aria-label="Filter experiments">
+      <ToggleGroupItem value="all" className={selectedClass}>
+        All
+      </ToggleGroupItem>
+      <ToggleGroupItem value="canvas" className={selectedClass}>
+        Canvas <span className="text-muted-foreground">3</span>
+      </ToggleGroupItem>
+      <ToggleGroupItem value="vite" className={selectedClass}>
+        Vite <span className="text-muted-foreground">1</span>
+      </ToggleGroupItem>
+    </ToggleGroup>
+  )
+}
+
 export function NavigationMenuDemo() {
   return (
     <NavigationMenu>
