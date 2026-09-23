@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-label="TODO(agustin): Recording Studio architecture">
+  <title>TODO(agustin): Recording Studio architecture</title>
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="oklch(0.66 0.21 285)" />
+      <stop offset="100%" stop-color="oklch(0.66 0.24 305)" />
+    </linearGradient>
+    <filter id="hue">
+      <feColorMatrix type="hueRotate" values="-8" />
+    </filter>
+  </defs>
+  <g filter="url(#hue)">
+    <rect width="1600" height="1000" fill="url(#g)" />
+  </g>
+</svg>

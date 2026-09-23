@@ -12,7 +12,7 @@ const badgeVariants = cva(
         default: 'border-border bg-muted text-foreground [a]:hover:bg-muted/70',
         secondary: 'border-border bg-muted text-foreground [a]:hover:bg-muted/70',
         /** Leadership / featured tags (02 "Team Lead"): brand at 15% fill, brand text, brand at 35% border. */
-        brand: 'border-brand/35 bg-brand/15 text-brand [a]:hover:bg-brand/20',
+        brand: 'border-brand/35 bg-brand/15 text-brand-ink [a]:hover:bg-brand/20',
         destructive:
           'border-transparent bg-destructive/10 text-destructive focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:focus-visible:ring-destructive/40 [a]:hover:bg-destructive/20',
         outline: 'border-border text-foreground [a]:hover:bg-muted [a]:hover:text-muted-foreground',

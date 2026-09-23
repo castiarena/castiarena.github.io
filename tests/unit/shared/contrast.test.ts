@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 
-import { parse, wcagContrast } from 'culori'
+import { interpolate, parse, wcagContrast } from 'culori'
 import { describe, expect, it } from 'vitest'
 
 const css = readFileSync(resolve(process.cwd(), 'src/app/globals.css'), 'utf8').replace(
@@ -48,6 +48,7 @@ const COLOR_TOKENS = [
   'brand-3',
   'brand-4',
   'brand-foreground',
+  'brand-ink',
   'destructive',
   'warning',
 ]
@@ -83,6 +84,23 @@ const TEXT_PAIRS: [foreground: string, background: string][] = [
   ['brand', 'background'], // brand link text on background
 ]
 
+// Tinted fills. A semi-transparent brand fill darkens (light) or lightens (dark) the surface under
+// it, so text on it needs checking against the *composited* colour, not the raw token — the case
+// this file used to miss entirely. `Badge variant="brand"` is text --brand-ink on --brand/15%,
+// which Tailwind emits as color-mix(in oklab, var(--brand) 15%, transparent); over an opaque
+// surface that composites to a 15/85 oklab mix.
+const TINT_PAIRS: [foreground: string, tint: string, alpha: number, surface: string][] = [
+  ['brand-ink', 'brand', 0.15, 'background'],
+  ['brand-ink', 'brand', 0.15, 'card'],
+  ['brand-ink', 'brand', 0.15, 'muted'],
+]
+
+function composite(theme: Record<string, string>, tint: string, alpha: number, surface: string) {
+  const mixed = interpolate([color(theme, surface), color(theme, tint)], 'oklab')(alpha)
+  if (!mixed) throw new Error(`Could not composite --${tint} over --${surface}`)
+  return mixed
+}
+
 // Focus ring against both surfaces — 3:1, not the 4.5:1 text floor.
 const RING_PAIRS: [foreground: string, background: string][] = [
   ['ring', 'background'],
@@ -101,6 +119,12 @@ describe.each(Object.entries(themes))('%s theme tokens', (_name, theme) => {
   it.each(TEXT_PAIRS)('%s on %s has contrast ≥ 4.5:1', (fg, bg) => {
     const ratio = wcagContrast(color(theme, fg), color(theme, bg))
     expect(ratio, `--${fg} on --${bg} = ${ratio.toFixed(2)}:1`).toBeGreaterThanOrEqual(4.5)
+  })
+
+  it.each(TINT_PAIRS)('%s on %s/%s over %s has contrast ≥ 4.5:1', (fg, tint, alpha, surface) => {
+    const ratio = wcagContrast(color(theme, fg), composite(theme, tint, alpha, surface))
+    const label = `--${fg} on --${tint}/${alpha * 100}% over --${surface}`
+    expect(ratio, `${label} = ${ratio.toFixed(2)}:1`).toBeGreaterThanOrEqual(4.5)
   })
 
   it.each(RING_PAIRS)('%s on %s has contrast ≥ 3:1', (fg, bg) => {
