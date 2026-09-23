@@ -1,12 +1,34 @@
+'use client'
+
 import type { ReactNode } from 'react'
 
-import { profile } from '@/content'
+import { Button } from '@/components/ui/button'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+
+import { ContactForm } from './contact-form'
 
 export interface ContactDialogProps {
   trigger?: ReactNode
 }
 
-// STUB — implemented by agent 2.6 (dialog + form). For now it is a plain mailto: link.
 export function ContactDialog({ trigger }: ContactDialogProps) {
-  return <a href={`mailto:${profile.email}`}>{trigger ?? 'Contact'}</a>
+  return (
+    <Dialog>
+      <DialogTrigger asChild>{trigger ?? <Button>Contact</Button>}</DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Get in touch</DialogTitle>
+          <DialogDescription>I usually reply within a couple of days.</DialogDescription>
+        </DialogHeader>
+        <ContactForm />
+      </DialogContent>
+    </Dialog>
+  )
 }
