@@ -2,13 +2,14 @@ import type { Project } from './types'
 
 // The owner has not provided project case studies yet (docs/plan/05-inputs-needed.md).
 // These 3 placeholders are derived from CV themes only (docs/plan/assets/cv-content.md).
-// Rule: every sentence NOT taken verbatim from the CV starts with `TODO(agustin):`.
+// Rule: every sentence NOT taken verbatim from the CV starts with `TODO(agustin):`, except the
+// titles, which the owner approved as real.
 // No numbers, confidential details or links are invented; `links` stays empty (NDA work).
 // Cover SVGs at /images/projects/<slug>.svg are created by agent 2.5.
 export const projects: Project[] = [
   {
     slug: 'recording-studio-architecture',
-    title: 'TODO(agustin): Recording Studio architecture',
+    title: 'Recording Studio architecture',
     summary:
       'Decomposed core business logic into GraphQL-powered microservices, enabling a more modular platform architecture',
     role: 'Senior Fullstack Engineer',
@@ -32,7 +33,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'vr-ar-healthcare-platform',
-    title: 'TODO(agustin): VR/AR healthcare platform',
+    title: 'VR/AR healthcare platform',
     summary:
       'Built and evolved a client-facing VR/AR healthcare platform used to deliver product improvements',
     role: 'Frontend Team Lead',
@@ -59,7 +60,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'micro-frontend-migration',
-    title: 'TODO(agustin): Micro frontend migration',
+    title: 'Micro frontend migration',
     summary:
       "Played a key role in one of the company's largest frontend modernization initiatives.",
     role: 'Senior Frontend Engineer',

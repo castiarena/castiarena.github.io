@@ -80,6 +80,12 @@ and commit.
 
 ## Step 2 — the questions only Agustin can answer (one sitting)
 
+**Done 2026-09-23.** Answers: (1) project titles drop the prefix and are real;
+(2) outcomes, problems, extra approach bullets, stack and cover alts stay `TODO(agustin)`
+until written; (3) the three placeholder experiments were deleted, leaving Portfolio v1;
+(4) no `sourceHref` for now; (5) the reference tagline is adopted; (6) achievement titles
+are sentence case (the CV test now compares them case-insensitively). Original list below.
+
 `src/content/` holds 24 `TODO(agustin)` placeholders (17 in `projects.ts`, 7 in
 `experiments.ts`). The UI renders them faithfully and mutes them, so the site is
 honest but reads as unfinished. These are the ones that actually change what's on

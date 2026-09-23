@@ -4,8 +4,9 @@ import type { Profile } from './types'
 export const profile: Profile = {
   name: 'Agustin Castiarena',
   role: 'Senior Frontend Engineer',
-  // Default tagline from docs/plan/05-inputs-needed.md (the owner may replace it).
-  tagline: 'I build fast, maintainable web products and the teams that ship them.',
+  // Tagline from the design reference (screen 03), approved by the owner.
+  tagline:
+    'I build fast, maintainable web products — and the teams that ship them. Ten years across e-commerce, media, healthcare and insurance.',
   location: 'Trevelin, Patagonia, Argentina',
   summary: [
     'Senior Frontend Engineer with 10+ years building and evolving modern web applications across e-commerce, media, healthcare, and insurance.',
