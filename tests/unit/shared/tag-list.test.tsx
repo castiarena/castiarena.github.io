@@ -30,4 +30,18 @@ describe('TagList', () => {
     const { container } = render(<TagList tags={[]} />)
     expect(container).toBeEmptyDOMElement()
   })
+
+  it('caps visible tags at max and shows a +N overflow badge', () => {
+    render(<TagList tags={['a', 'b', 'c', 'd']} max={3} />)
+    const list = screen.getByRole('list', { name: 'Tags' })
+    const items = within(list).getAllByRole('listitem')
+    expect(items).toHaveLength(4)
+    expect(items.map((item) => item.textContent)).toEqual(['a', 'b', 'c', '+1'])
+  })
+
+  it('renders every tag with no overflow badge when under the max', () => {
+    render(<TagList tags={['a', 'b']} max={5} />)
+    const list = screen.getByRole('list', { name: 'Tags' })
+    expect(within(list).getAllByRole('listitem')).toHaveLength(2)
+  })
 })

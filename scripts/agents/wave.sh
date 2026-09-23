@@ -139,7 +139,15 @@ cmd_launch() {
     echo "▶ $id → $log"
     (
       cd "$wt"
-      "$AGENT_CMD" -p "$(cat "docs/plan/$prompt")"
+      # AGENT_NOTE is appended to every prompt in the wave — use it for instructions that
+      # apply to the whole wave (how to finish, known gaps) without editing the prompt files.
+      "$AGENT_CMD" -p "$(cat "docs/plan/$prompt")${AGENT_NOTE:+
+
+---
+
+## Orchestrator note for this run
+
+$AGENT_NOTE}"
     ) >"$log" 2>&1 &
     pids+=($!)
   done < <(wave_agents "$wave")

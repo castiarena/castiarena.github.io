@@ -1,128 +1,114 @@
 /*
- * Design tokens — owned by agent 1.1.
+ * Design tokens — owned by agent F1 (docs/plan/design-build/01-design-tokens.md).
  * Colours are OKLCH only (no hex / rgb). Contrast is enforced by tests/unit/shared/contrast.test.ts.
- * Dark is the default theme (01 §4); `.dark` is toggled on <html> by next-themes (class strategy).
+ * Dark is the default theme (01 §2); `.dark` is toggled on <html> by next-themes (class strategy).
  */
 @import 'tailwindcss';
 @import 'tw-animate-css';
+/* Custom variants (data-open/data-closed/data-checked/…) used by field, sheet, scroll-area,
+   navigation-menu, toggle-group, tooltip, dialog and separator, plus the accordion keyframes.
+   Not part of the 01-design-tokens.md skeleton — kept because removing it breaks those primitives
+   until F2's restyle lands. See docs/handoffs/F1.md. */
 @import 'shadcn/tailwind.css';
 
 @custom-variant dark (&:is(.dark *));
 
-/* ---------------------------------------------------------------- light */
+/* ---------------------------------------------------------------- light (default :root) */
 /* `.light` lets a subtree force the light palette inside a dark page (style guide swatches). */
 :root,
 .light {
-  --background: oklch(0.99 0.002 260);
-  --foreground: oklch(0.17 0.015 260);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.17 0.015 260);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.17 0.015 260);
-  --primary: oklch(0.52 0.19 258);
-  --primary-foreground: oklch(0.99 0.002 260);
-  --secondary: oklch(0.96 0.006 260);
-  --secondary-foreground: oklch(0.22 0.015 260);
-  --muted: oklch(0.96 0.006 260);
-  --muted-foreground: oklch(0.5 0.02 260);
-  --accent: oklch(0.95 0.02 255);
-  --accent-foreground: oklch(0.22 0.02 260);
-  --destructive: oklch(0.5 0.2 27);
-  --border: oklch(0.91 0.008 260);
-  --input: oklch(0.91 0.008 260);
-  --ring: oklch(0.52 0.19 258);
-  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --card: oklch(0.985 0.002 285);
+  --muted: oklch(0.967 0.003 285);
+  --border: oklch(0.9 0.004 285);
+  --input: oklch(0.94 0.003 285);
+  --muted-foreground: oklch(0.45 0.012 285);
+  --foreground: oklch(0.17 0.006 285);
+  --ring: var(--brand);
+  --destructive: oklch(0.63 0.21 25);
+  --warning: oklch(0.78 0.14 85);
 
-  /* Brand — deepened for legibility on a light background */
-  --brand: oklch(0.52 0.19 258);
-  --brand-2: oklch(0.56 0.11 200);
-  --brand-3: oklch(0.52 0.22 305);
-  --brand-foreground: oklch(0.99 0.002 260);
+  /* Brand — hues are identical across themes (01 §2 note). Only --brand's lightness moves, to
+     clear 4.5:1 for brand-coloured text on a white background (0.63 → 0.56, tested below). */
+  --brand: oklch(0.56 0.19 256);
+  --brand-2: oklch(0.72 0.17 195);
+  --brand-3: oklch(0.66 0.24 305);
+  --brand-4: oklch(0.66 0.21 285);
+  --brand-foreground: oklch(0.99 0 0);
+
+  /* Layout */
+  --container: 72rem;
+
+  /* Radii (01 §5) */
+  --radius: 0.75rem;
+
+  /* Type scale (01 §3) */
+  --text-display: clamp(2.75rem, 1.6rem + 4.2vw, 4.5rem);
+  --text-h1: clamp(2rem, 1.4rem + 2.2vw, 3rem);
+  --text-h2: clamp(1.375rem, 1.1rem + 1vw, 1.75rem);
+  --text-h3: 1.0625rem;
+
+  /* Motion budget (01 §6) */
+  --dur-ui: 200ms;
+  --dur-reveal: 500ms;
 }
 
-/* ----------------------------------------------------------------- dark */
+/* ----------------------------------------------------------------- dark (default theme) */
 .dark {
   color-scheme: dark;
 
-  --background: oklch(0.155 0.014 262);
-  --foreground: oklch(0.96 0.005 260);
-  --card: oklch(0.2 0.015 262);
-  --card-foreground: oklch(0.96 0.005 260);
-  --popover: oklch(0.2 0.015 262);
-  --popover-foreground: oklch(0.96 0.005 260);
-  --primary: oklch(0.7 0.15 256);
-  --primary-foreground: oklch(0.155 0.014 262);
-  --secondary: oklch(0.25 0.016 262);
-  --secondary-foreground: oklch(0.96 0.005 260);
-  --muted: oklch(0.25 0.016 262);
-  --muted-foreground: oklch(0.72 0.02 260);
-  --accent: oklch(0.27 0.03 258);
-  --accent-foreground: oklch(0.96 0.005 260);
-  --destructive: oklch(0.7 0.19 22);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.63 0.19 256);
+  --background: oklch(0.145 0.005 285);
+  --card: oklch(0.185 0.006 285);
+  --muted: oklch(0.21 0.006 285);
+  --border: oklch(0.27 0.008 285);
+  --input: oklch(0.24 0.007 285);
+  --muted-foreground: oklch(0.73 0.012 285);
+  --foreground: oklch(0.97 0.002 285);
+  --ring: var(--brand);
+  --destructive: oklch(0.63 0.21 25);
+  --warning: oklch(0.78 0.14 85);
 
-  /* Brand — exact values from 01 §4 */
   --brand: oklch(0.63 0.19 256);
   --brand-2: oklch(0.72 0.17 195);
   --brand-3: oklch(0.66 0.24 305);
-  --brand-foreground: oklch(0.155 0.014 262);
+  --brand-4: oklch(0.66 0.21 285);
+  /* White (0.99, the spec value) only clears 3.45:1 against this brand fill. Darkened, lightness
+     only, to clear 4.5:1 — see 01 §1 note and docs/handoffs/F1.md. */
+  --brand-foreground: oklch(0.15 0 0);
 }
 
 .light {
   color-scheme: light;
 }
 
-/* ---------------------------------------------------- theme → utilities */
+/* ---------------------------------------------------- theme → utilities (01 §9) */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-brand: var(--brand);
   --color-brand-2: var(--brand-2);
   --color-brand-3: var(--brand-3);
+  --color-brand-4: var(--brand-4);
+  /* Not in the §9 snippet verbatim — added so `bg-brand text-brand-foreground` (the solid-fill
+     pattern every brand-coloured surface needs) resolves. See docs/handoffs/F1.md. */
   --color-brand-foreground: var(--brand-foreground);
+  --color-destructive: var(--destructive);
+  --color-warning: var(--warning);
 
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
-  --font-heading: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
 
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
-}
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
 
-/* Fluid type scale → `text-display`, `text-h1`, `text-h2` */
-@theme {
-  --text-display: clamp(2.75rem, 1.6rem + 5vw, 5rem);
-  --text-display--line-height: 1.02;
-  --text-display--letter-spacing: -0.035em;
-  --text-h1: clamp(2.25rem, 1.6rem + 3vw, 3.5rem);
-  --text-h1--line-height: 1.08;
-  --text-h1--letter-spacing: -0.025em;
-  --text-h2: clamp(1.5rem, 1.2rem + 1.5vw, 2.25rem);
-  --text-h2--line-height: 1.2;
-  --text-h2--letter-spacing: -0.015em;
+  --ease-brand: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* ------------------------------------------------------------ utilities */
@@ -145,7 +131,93 @@
 }
 
 @utility container-page {
-  @apply mx-auto w-full max-w-6xl px-4 sm:px-6;
+  max-inline-size: var(--container);
+  margin-inline: auto;
+  padding-inline: 1rem;
+
+  @media (width >= 40rem) {
+    padding-inline: 1.5rem;
+  }
+}
+
+/* Three blurred brand blobs behind hero content (01 §8). The blur lives on a ::before layer so it
+   never applies to the hero's real children — no extra DOM node is needed for it. */
+@utility bg-hero-mesh {
+  position: relative;
+  isolation: isolate;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -10%;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+      radial-gradient(
+        circle at 15% 20%,
+        color-mix(in oklch, var(--brand) 14%, transparent),
+        transparent 60%
+      ),
+      radial-gradient(
+        circle at 50% 35%,
+        color-mix(in oklch, var(--brand-2) 12%, transparent),
+        transparent 60%
+      ),
+      radial-gradient(
+        circle at 85% 15%,
+        color-mix(in oklch, var(--brand-3) 12%, transparent),
+        transparent 60%
+      );
+    filter: blur(80px);
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+  }
+}
+
+/* For interactive elements that can't rely on :focus-visible alone (e.g. a focus ring drawn on a
+   wrapper around a visually-hidden control). Prefer :focus-visible; use this utility manually. */
+@utility focus-ring {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: inherit;
+}
+
+@utility hairline-t {
+  border-top: 1px solid var(--border);
+}
+
+@utility hairline-b {
+  border-bottom: 1px solid var(--border);
+}
+
+/* Fluid type scale (01 §3) — pages use these instead of raw text-[…] sizes. */
+@utility text-display {
+  font-size: var(--text-display);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+}
+
+@utility text-h1 {
+  font-size: var(--text-h1);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+@utility text-h2 {
+  font-size: var(--text-h2);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+
+@utility text-h3 {
+  font-size: var(--text-h3);
+  font-weight: 600;
+  line-height: 1.3;
 }
 
 /* ----------------------------------------------------------------- base */
@@ -156,7 +228,9 @@
     -webkit-text-size-adjust: 100%;
   }
 
-  * {
+  *,
+  ::before,
+  ::after {
     @apply border-border;
   }
 
@@ -164,9 +238,19 @@
     @apply bg-background font-sans text-foreground antialiased;
   }
 
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    letter-spacing: -0.01em;
+  }
+
   :focus-visible {
     outline: 2px solid var(--ring);
     outline-offset: 2px;
+    border-radius: inherit;
   }
 
   ::selection {
@@ -178,12 +262,18 @@
       scroll-behavior: auto;
     }
 
+    :root {
+      --dur-ui: 1ms;
+      --dur-reveal: 1ms;
+    }
+
     *,
     ::before,
     ::after {
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
     }
   }
 }

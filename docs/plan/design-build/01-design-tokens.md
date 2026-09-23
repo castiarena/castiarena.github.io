@@ -13,7 +13,7 @@ Everything lives in `src/app/globals.css`. No component may hard-code a colour, 
 | `--brand` | `oklch(0.63 0.19 256)` **(from design)** | Primary actions, links, the first stat, focus ring |
 | `--brand-2` | `oklch(0.72 0.17 195)` **(from design)** | Cyan accent, second stat, gradient middle |
 | `--brand-3` | `oklch(0.66 0.24 305)` **(from design)** | Violet accent, fourth stat, timeline dots, logo dot |
-| `--brand-foreground` | `oklch(0.99 0 0)` | Text on `--brand` fills |
+| `--brand-foreground` | `oklch(0.99 0 0)` (light) · `oklch(0.15 0 0)` (dark) — see §2 note | Text on `--brand` fills |
 
 **Signature gradient (from design)**
 
@@ -65,6 +65,8 @@ Where the gradient appears: the hero role line, the 404 numerals, avatar rings, 
 | `--ring` | `var(--brand)` |
 
 Brand hues are identical in both themes. On light, `--brand` text on `--background` must clear 4.5:1 — if it doesn't, darken the lightness for the light theme only (`oklch(0.56 0.19 256)`) and note it.
+
+`--brand-foreground` is not marked **(from design)**, unlike `--brand` itself, so it is the one that moves: white (`oklch(0.99 0 0)`) on the dark theme's `--brand` fill (`oklch(0.63 0.19 256)`) is only 3.45:1. F1 darkened `--brand-foreground` to `oklch(0.15 0 0)` for the dark theme (lightness only, chroma stays 0); the light theme keeps `oklch(0.99 0 0)`, which already clears 4.61:1 against the light theme's `--brand`.
 
 ---
 
@@ -163,6 +165,7 @@ Applies to **every** interactive element, including cards that are links. Minimu
   --color-brand-2: var(--brand-2);
   --color-brand-3: var(--brand-3);
   --color-brand-4: var(--brand-4);
+  --color-brand-foreground: var(--brand-foreground);
   --color-destructive: var(--destructive);
   --color-warning: var(--warning);
   --font-sans: var(--font-geist-sans);
