@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 
-import { BioHeader, getTimelineGapNotes, OnThisPageRail, TimelineNode } from '@/components/bio'
+import { BioHeader, OnThisPageRail, TimelineNode } from '@/components/bio'
 import { Container, SectionHeading, StatTile, type StatTileAccent } from '@/components/shared'
 import { Badge } from '@/components/ui/badge'
 import { achievements, courses, experiences, profile, skillGroups } from '@/content'
@@ -21,8 +21,6 @@ function sentenceCase(value: string): string {
 }
 
 export default function BioPage() {
-  const gapNotes = getTimelineGapNotes(experiences)
-
   return (
     <Container>
       <BioHeader profile={profile} />
@@ -51,11 +49,6 @@ export default function BioPage() {
                 />
               ))}
             </ol>
-            {gapNotes.map((note) => (
-              <p key={note} className="mt-4 font-mono text-xs text-muted-foreground">
-                {note}
-              </p>
-            ))}
           </section>
 
           <section id="achievements" className="scroll-mt-24">

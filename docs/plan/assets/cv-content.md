@@ -45,15 +45,37 @@ Played a key role in one of the company's largest frontend modernization initiat
 - Built and maintained a shared UI kit that improved consistency across frontend teams
 - Migrated core checkout and payments functionality to support the broader modernization effort
 
+### Fullstack Engineer — AXA
+**12/2018 – 12/2019**
+
 ### Senior Frontend Engineer — Mercado Libre
 **11/2015 – 10/2018**
+Worked on one of Latin America's largest e-commerce platforms, delivering product improvements for millions of users.
 - Built and maintained purchase flow functionality across the platform
 - Rolled out purchase flow initiatives across multiple Latin American countries
 - Improved automation processes and engineering quality
 - Strengthened testing practices within the engineering team
 - Delivered scalable solutions in collaboration with multiple product teams
 
-> Gap 10/2018 – 01/2020 isn't on the CV. Don't invent anything. Ask the human if the timeline should show it.
+### Senior Frontend Developer — Basso Brovelli
+**08/2014 – 12/2015**
+
+### Junior Frontend Developer — Cobranzas
+**05/2014 – 08/2014**
+- Improved and maintained a legacy user interface from 1999, transitioning to modern JavaScript frameworks.
+- Integrated Bootstrap to enhance the UI's responsiveness and user experience.
+- Contributed to asynchronous operations by adding JSON support to existing XML API responses on ASP.NET servers.
+
+### Freelance Developer — Ilcacto
+**08/2012 – 12/2012**
+
+### Freelance Developer — Octavo Círculo
+**03/2012 – 11/2012**
+Information architecture, web layout, SEO, site traffic monitoring and data retrieval from MySQL databases.
+
+> AXA, the Mercado Libre intro and every role from Basso Brovelli down come from Agustin's LinkedIn
+> export (2026-09-23), which closes the old 10/2018 – 01/2020 gap. The Octavo Círculo line is
+> translated from the Spanish original; the two freelance titles were "Programador freelance".
 
 ## Key Achievements
 | Title | Metric | Description |

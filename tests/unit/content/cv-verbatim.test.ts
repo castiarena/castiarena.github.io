@@ -60,13 +60,18 @@ const cvSentences = new Set([
 ])
 
 describe('experience matches the CV verbatim', () => {
-  it('has the 4 CV roles, newest first, with the expected ids', () => {
-    expect(cvRoles).toHaveLength(4)
+  it('has the 9 CV roles, newest first, with the expected ids', () => {
+    expect(cvRoles).toHaveLength(9)
     expect(experiences.map((experience) => experience.id)).toEqual([
       'riverside',
       'realworld-one',
       'westwing',
+      'axa',
       'mercado-libre',
+      'basso-brovelli',
+      'cobranzas',
+      'ilcacto',
+      'octavo-circulo',
     ])
     expect(experiences.map((experience) => experience.company)).toEqual(
       cvRoles.map((role) => role.company),

@@ -89,7 +89,8 @@ export const experienceSchema = z
     end: z.union([isoDateMonth, z.literal('present')]),
     // Can be empty: not every CV role has an intro paragraph.
     intro: z.string(),
-    highlights: z.array(text).min(1, 'needs at least one highlight'),
+    // Can be empty: some older roles have no description.
+    highlights: z.array(text),
     stack: z.array(text).optional(),
   })
   .superRefine((experience, ctx) => {
