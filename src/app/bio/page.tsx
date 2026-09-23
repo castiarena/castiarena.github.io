@@ -14,6 +14,12 @@ export const metadata: Metadata = {
 // Same order as Home's impact strip (03-page-specs.md "Impact strip").
 const ACHIEVEMENT_ACCENTS: StatTileAccent[] = ['brand', 'brand-2', 'brand-4', 'brand-3']
 
+// Content titles are Title Case ("Scalability Enhancement"); the design (04-bio-desktop.png)
+// renders them sentence case under the stat value ("Scalability enhancement").
+function sentenceCase(value: string): string {
+  return value.charAt(0) + value.slice(1).toLowerCase()
+}
+
 export default function BioPage() {
   const gapNotes = getTimelineGapNotes(experiences)
 
@@ -60,7 +66,7 @@ export default function BioPage() {
                   key={achievement.id}
                   value={achievement.metric.value}
                   unit={achievement.metric.unit}
-                  label={achievement.title}
+                  label={sentenceCase(achievement.title)}
                   description={achievement.description}
                   accent={ACHIEVEMENT_ACCENTS[index % ACHIEVEMENT_ACCENTS.length] ?? 'brand'}
                   variant="card"
