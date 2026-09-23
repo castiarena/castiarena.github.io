@@ -17,22 +17,32 @@ import { cn } from '@/lib/utils'
 import { copyToClipboard } from './copy-to-clipboard'
 import { CONTACT_MESSAGE_MAX, CONTACT_MIN_SUBMIT_MS, contactFormSchema } from './contact-schema'
 import type { ContactFormValues } from './contact-schema'
-import { submitContactForm } from './form-endpoint'
+import { getEmailApiConfig, submitContactForm } from './form-endpoint'
+import type { SubmitFailureReason } from './form-endpoint'
 import { buildMailto } from './mailto'
+import { TurnstileWidget } from './turnstile-widget'
+import type { TurnstileWidgetHandle } from './turnstile-widget'
 
 type Status = 'idle' | 'submitting' | 'success' | 'error'
 
 const defaultValues: ContactFormValues = { name: '', email: '', message: '', company: '' }
 
 export function ContactForm() {
-  const formEndpoint = process.env.NEXT_PUBLIC_FORM_ENDPOINT
-  const hasEndpoint = Boolean(formEndpoint)
+  const apiConfig = getEmailApiConfig()
+  const hasEndpoint = apiConfig !== null
 
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
     defaultValues,
   })
   const [status, setStatus] = useState<Status>('idle')
+  const [errorReason, setErrorReason] = useState<SubmitFailureReason | null>(null)
+  // Single-use Turnstile token, kept in memory only.
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null)
+  const turnstileRef = useRef<TurnstileWidgetHandle>(null)
+  // One Idempotency-Key per message: reused while retrying the same values (e.g. after a timeout
+  // that may have gone through), replaced once the values change or a send succeeds.
+  const idempotencyRef = useRef<{ key: string; fingerprint: string } | null>(null)
 
   // Tracked from when the form mounts (i.e. when the dialog opens, since DialogContent unmounts
   // while closed) rather than page load — a 3-second minimum time-to-submit, per the mission.
@@ -56,23 +66,39 @@ export function ContactForm() {
       return
     }
 
-    if (!formEndpoint) {
+    if (!apiConfig) {
       window.location.assign(buildMailto(profile.email, values))
       toast.success('Opening your email app…')
       return
     }
 
+    if (!captchaToken) return
+
+    const payload = { name: values.name, email: values.email, message: values.message }
+    const fingerprint = JSON.stringify(payload)
+    if (idempotencyRef.current?.fingerprint !== fingerprint) {
+      idempotencyRef.current = { key: crypto.randomUUID(), fingerprint }
+    }
+
     setStatus('submitting')
-    try {
-      const result = await submitContactForm(formEndpoint, values)
-      if (result.ok) {
-        setStatus('success')
-        toast.success("Thanks — I'll be in touch.")
-      } else {
-        setStatus('error')
-      }
-    } catch {
+    setErrorReason(null)
+    const result = await submitContactForm(apiConfig, payload, {
+      captchaToken,
+      idempotencyKey: idempotencyRef.current.key,
+    })
+    // Every request that reached the API spent the token, success or not.
+    turnstileRef.current?.reset()
+
+    if (result.ok) {
+      idempotencyRef.current = null
+      setStatus('success')
+      toast.success("Thanks — I'll be in touch.")
+    } else if (result.reason === 'captcha') {
+      setStatus('idle')
+      setErrorReason('captcha')
+    } else {
       setStatus('error')
+      setErrorReason(result.reason)
     }
   }
 
@@ -162,6 +188,21 @@ export function ContactForm() {
         </div>
       </fieldset>
 
+      {apiConfig ? (
+        <div className="flex flex-col gap-2">
+          <TurnstileWidget
+            ref={turnstileRef}
+            siteKey={apiConfig.turnstileSiteKey}
+            onTokenChange={setCaptchaToken}
+          />
+          {errorReason === 'captcha' ? (
+            <p role="alert" className="text-sm text-destructive">
+              The spam check didn&apos;t go through. Please complete it again, then resend.
+            </p>
+          ) : null}
+        </div>
+      ) : null}
+
       {status === 'error' ? (
         <div
           role="alert"
@@ -169,7 +210,9 @@ export function ContactForm() {
         >
           <p className="flex items-center gap-2 font-medium">
             <TriangleAlertIcon className="size-4 shrink-0" aria-hidden="true" />
-            Something went wrong sending that — the endpoint might be down.
+            {errorReason === 'rate_limited'
+              ? 'Too many messages right now, try again in a minute.'
+              : 'Something went wrong sending that — the endpoint might be down.'}
           </p>
           <a
             href={buildMailto(profile.email, form.getValues())}
@@ -182,7 +225,7 @@ export function ContactForm() {
       ) : null}
 
       <div className="flex flex-wrap gap-3">
-        <Button type="submit" loading={submitting}>
+        <Button type="submit" loading={submitting} disabled={hasEndpoint && !captchaToken}>
           {submitting ? 'Sending…' : hasEndpoint ? 'Send message' : 'Open email app'}
         </Button>
         <Button type="button" variant="outline" onClick={handleCopyEmail}>
@@ -192,9 +235,9 @@ export function ContactForm() {
       </div>
 
       <p className="pt-4 font-mono text-xs text-muted-foreground hairline-t">
-        No server on GitHub Pages: posts to NEXT_PUBLIC_FORM_ENDPOINT when set, otherwise the button
-        becomes &ldquo;Open email app&rdquo; and builds a mailto:. Honeypot field and a 3s minimum
-        keep bots out.
+        No server on GitHub Pages: sends through my email API (NEXT_PUBLIC_EMAIL_API_URL) behind a
+        Cloudflare Turnstile check when configured, otherwise the button becomes &ldquo;Open email
+        app&rdquo; and builds a mailto:. Turnstile, a honeypot field and a 3s minimum keep bots out.
       </p>
     </form>
   )

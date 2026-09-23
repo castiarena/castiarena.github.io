@@ -41,7 +41,10 @@ jobs:
         env:
           NEXT_PUBLIC_SITE_URL: https://castiarena.github.io
           NEXT_PUBLIC_DEPLOY_ENV: production
-          NEXT_PUBLIC_FORM_ENDPOINT: ${{ vars.NEXT_PUBLIC_FORM_ENDPOINT }}
+          # Contact form (castiarena/email-api + Cloudflare Turnstile). Public values, so repo Variables.
+          NEXT_PUBLIC_EMAIL_API_URL: ${{ vars.NEXT_PUBLIC_EMAIL_API_URL }}
+          NEXT_PUBLIC_EMAIL_API_KEY: ${{ vars.NEXT_PUBLIC_EMAIL_API_KEY }}
+          NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.NEXT_PUBLIC_TURNSTILE_SITE_KEY }}
       - run: touch out/.nojekyll && node scripts/verify-export.mjs
         env:
           VERIFY_STRICT: '0' # agent 3.1 flips this to '1' once sitemap.xml/robots.txt exist

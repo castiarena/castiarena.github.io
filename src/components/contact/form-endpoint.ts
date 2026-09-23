@@ -2,41 +2,92 @@ import type { ContactFormValues } from './contact-schema'
 
 type SubmitValues = Pick<ContactFormValues, 'name' | 'email' | 'message'>
 
+export interface EmailApiConfig {
+  /** Base URL of the email API, without a trailing slash. */
+  url: string
+  /** Browser-safe public key (`pk_live_…`). The server locks it to our origins, `contact` and a fixed `to`. */
+  apiKey: string
+  /** Cloudflare Turnstile *site* key. The API rejects every public-key request without a token. */
+  turnstileSiteKey: string
+}
+
+export type SubmitFailureReason = 'captcha' | 'rate_limited' | 'failed'
+export type SubmitResult = { ok: true } | { ok: false; reason: SubmitFailureReason }
+
+export interface SubmitOptions {
+  captchaToken: string
+  idempotencyKey: string
+  timeoutMs?: number
+}
+
+export const SUBMIT_TIMEOUT_MS = 15_000
+
 /**
- * Posts the form to whichever third-party endpoint `NEXT_PUBLIC_FORM_ENDPOINT` names — the site
- * has no server to post to (01-architecture.md §1, 03-deployment-flow.md §8). Keyed on the
- * endpoint's hostname so both shapes are supported without a config flag:
- *
- * - Formspree (`formspree.io`): a plain `{ name, email, message }` JSON body.
- * - Web3Forms (`api.web3forms.com`): the same body plus `access_key`, read from an
- *   `?access_key=…` query param on the endpoint URL itself (Web3Forms' key is public by design —
- *   it's meant to sit in client-side code) and a `{ success: boolean }` response body.
+ * Reads the build-time config (inlined by `next build`, the site has no server). Returns `null`
+ * unless all three values are set, which keeps the form on its `mailto:` fallback.
+ */
+export function getEmailApiConfig(): EmailApiConfig | null {
+  const url = process.env.NEXT_PUBLIC_EMAIL_API_URL?.trim().replace(/\/+$/, '')
+  const apiKey = process.env.NEXT_PUBLIC_EMAIL_API_KEY?.trim()
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY?.trim()
+  if (!url || !apiKey || !turnstileSiteKey) return null
+  return { url, apiKey, turnstileSiteKey }
+}
+
+/**
+ * Sends the form through the email API's `contact` template (castiarena/email-api,
+ * `POST /api/send`). The server parses strictly, so the body holds exactly `template`, `reply_to`,
+ * `data` and `captcha_token`: no honeypot, no `to`/`subject`/`html` (the key's policy fixes those).
  */
 export async function submitContactForm(
-  endpoint: string,
+  config: Pick<EmailApiConfig, 'url' | 'apiKey'>,
   values: SubmitValues,
-): Promise<{ ok: boolean }> {
-  const url = new URL(endpoint)
-  const isWeb3Forms = url.hostname.endsWith('web3forms.com')
+  { captchaToken, idempotencyKey, timeoutMs = SUBMIT_TIMEOUT_MS }: SubmitOptions,
+): Promise<SubmitResult> {
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), timeoutMs)
 
-  const payload: Record<string, unknown> = {
-    name: values.name,
-    email: values.email,
-    message: values.message,
+  let response: Response
+  try {
+    response = await fetch(`${config.url.replace(/\/+$/, '')}/api/send`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${config.apiKey}`,
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'Idempotency-Key': idempotencyKey,
+      },
+      body: JSON.stringify({
+        template: 'contact',
+        reply_to: values.email,
+        data: { name: values.name, email: values.email, message: values.message },
+        captcha_token: captchaToken,
+      }),
+      signal: controller.signal,
+    })
+  } catch {
+    // Network error, CORS failure or the timeout abort: nothing the visitor can fix here.
+    return { ok: false, reason: 'failed' }
+  } finally {
+    clearTimeout(timeout)
   }
-  if (isWeb3Forms) {
-    payload.access_key = url.searchParams.get('access_key') ?? ''
+
+  if (response.ok) return { ok: true }
+  if (response.status === 429) return { ok: false, reason: 'rate_limited' }
+
+  const code = await readErrorCode(response)
+  if (response.status === 403 && code === 'captcha_failed') return { ok: false, reason: 'captcha' }
+
+  // Config/contract bugs (400/401/403/413/415/422) and 5xx. Log only the error code, never values.
+  console.error(`[contact] email API responded ${response.status} ${code ?? 'unknown_error'}`)
+  return { ok: false, reason: 'failed' }
+}
+
+async function readErrorCode(response: Response): Promise<string | undefined> {
+  try {
+    const body = (await response.json()) as { error?: { code?: unknown } } | null
+    return typeof body?.error?.code === 'string' ? body.error.code : undefined
+  } catch {
+    return undefined
   }
-
-  const response = await fetch(endpoint, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-    body: JSON.stringify(payload),
-  })
-
-  if (!response.ok) return { ok: false }
-  if (!isWeb3Forms) return { ok: true }
-
-  const data = (await response.json().catch(() => null)) as { success?: boolean } | null
-  return { ok: data?.success !== false }
 }
