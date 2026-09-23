@@ -20,8 +20,11 @@ export const experiences: Experience[] = [
       'Reduced frontend complexity through large-scale technical refactoring that improved maintainability',
       'Introduced AI-assisted engineering workflows and code review automation to streamline development practices',
       "Delivered features across engineering teams for one of the company's most business-critical products",
+      'Developed Livestream integrations, enabling platform login and RTMP streaming with refresh token circuits',
+      'Facilitated stable peer-to-peer communication for video calls, enhancing user experience',
+      'Provided technical support to high-profile clients including Microsoft, TED, X, and Spotify',
     ],
-    stack: ['GraphQL', 'Microservices'],
+    stack: ['React', 'GraphQL', 'Microservices', 'Integration Testing'],
   },
   {
     id: 'realworld-one',
@@ -39,6 +42,7 @@ export const experiences: Experience[] = [
       'Strengthened team growth through mentoring and resource planning',
       'Shipped product improvements in close partnership with stakeholders',
     ],
+    stack: ['React', 'Integration Testing'],
   },
   {
     id: 'westwing',
@@ -52,8 +56,10 @@ export const experiences: Experience[] = [
       'Advanced the platform migration toward a decentralized micro frontend architecture',
       'Built and maintained a shared UI kit that improved consistency across frontend teams',
       'Migrated core checkout and payments functionality to support the broader modernization effort',
+      'Developed an internal tool utilizing the company UI library, enabling contributions from all team members',
+      'Implemented automated processes for seamless version creation and publishing, enhancing team efficiency',
     ],
-    stack: ['Micro frontends'],
+    stack: ['React', 'Micro frontends', 'Integration Testing'],
   },
   {
     id: 'axa',
@@ -62,8 +68,12 @@ export const experiences: Experience[] = [
     start: '2018-12',
     end: '2019-12',
     intro: '',
-    highlights: [],
-    stack: ['React', 'Test-Driven Development'],
+    highlights: [
+      'Led the migration of a React project from JavaScript to a typed solution, enhancing code reliability.',
+      'Advocated for end-to-end testing based on BDD using Gherkin language for the E-Rescue project.',
+      'Contributed to the significant migration of the E-Lawyers project, ensuring secure database connections with Redux Saga.',
+    ],
+    stack: ['React', 'Test-Driven Development', 'Redux Saga'],
   },
   {
     id: 'mercado-libre',
@@ -80,7 +90,12 @@ export const experiences: Experience[] = [
       'Improved automation processes and engineering quality',
       'Strengthened testing practices within the engineering team',
       'Delivered scalable solutions in collaboration with multiple product teams',
+      'Built and nurtured a team focused on Frontend implementations, fostering collaboration and innovation',
+      'Developed a modular component for Google Maps integration, widely adopted across the company',
+      'Implemented an E2E test suite supporting over 1000 cases for various payment methods, ensuring reliability in key markets',
+      'Transitioned inline JavaScript to a Node.js process, enhancing compatibility with modern frontend technologies',
     ],
+    stack: ['React', 'TypeScript', 'Node.js', 'Test-Driven Development'],
   },
   {
     id: 'basso-brovelli',
@@ -89,7 +104,11 @@ export const experiences: Experience[] = [
     start: '2014-08',
     end: '2015-12',
     intro: '',
-    highlights: [],
+    highlights: [
+      'Developed innovative web solutions for high-profile marketing campaigns for brands like Branca and Villa del Sur.',
+      'Collaborated with cross-functional teams to enhance frontend applications for various clients, including N.A.S.A (Argentina) and DutyFree.',
+      'Utilized modern frontend technologies to ensure optimal user experience and engagement across all projects.',
+    ],
     stack: ['React', 'Test-Driven Development'],
   },
   {
@@ -112,7 +131,8 @@ export const experiences: Experience[] = [
     title: 'Freelance Developer',
     start: '2012-08',
     end: '2012-12',
-    intro: '',
+    intro:
+      'Support building and maintaining websites, also contributed on-site presentation for interactive projects at Tecnolopis in Buenos Aires.',
     highlights: [],
   },
   {
@@ -121,9 +141,12 @@ export const experiences: Experience[] = [
     title: 'Freelance Developer',
     start: '2012-03',
     end: '2012-11',
-    intro:
-      'Information architecture, web layout, SEO, site traffic monitoring and data retrieval from MySQL databases.',
-    highlights: [],
-    stack: ['MySQL'],
+    intro: '',
+    highlights: [
+      'Provided frontend support for e-commerce pages tailored to natural pharmacies in Spain.',
+      'Maintained and integrated new features to enhance user experience and functionality.',
+      'Contributed to the updating of promotional websites, ensuring they remained current and engaging.',
+      'Collaborated with Octavo Círculo, a dynamic advertising services startup, to drive online presence.',
+    ],
   },
 ]
