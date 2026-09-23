@@ -7,7 +7,7 @@ import { siteConfig } from '@/config/site'
 afterEach(cleanup)
 
 describe('Logo', () => {
-  it('links home and names the site', () => {
+  it('links to the root and names the site', () => {
     render(<Logo />)
     const link = screen.getByRole('link', { name: siteConfig.name })
     expect(link.getAttribute('href')).toMatch(/^\/$/)

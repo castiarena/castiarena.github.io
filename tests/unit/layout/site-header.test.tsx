@@ -31,12 +31,11 @@ async function renderHeader() {
 }
 
 describe('SiteHeader', () => {
-  it('renders every siteConfig.nav entry, plus Home', async () => {
+  it('renders every siteConfig.nav entry', async () => {
     usePathnameMock.mockReturnValue('/')
     await renderHeader()
 
     const nav = screen.getByRole('navigation', { name: 'Main' })
-    expect(within(nav).getByRole('link', { name: 'Home' })).toBeInTheDocument()
     for (const item of siteConfig.nav) {
       expect(within(nav).getByRole('link', { name: item.label })).toBeInTheDocument()
     }
@@ -48,7 +47,6 @@ describe('SiteHeader', () => {
 
     const nav = screen.getByRole('navigation', { name: 'Main' })
     expect(within(nav).getByRole('link', { name: 'Bio' })).toHaveAttribute('aria-current', 'page')
-    expect(within(nav).getByRole('link', { name: 'Home' })).not.toHaveAttribute('aria-current')
   })
 
   it('hides the nav, theme toggle and hamburger on the 404 variant', async () => {

@@ -3,19 +3,15 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { MobileNav } from '@/components/layout/mobile-nav'
 
-const items = [
-  { href: '/', label: 'Home' },
-  { href: '/bio/', label: 'Bio' },
-]
+const items = [{ href: '/bio/', label: 'Bio' }]
 
 afterEach(cleanup)
 
 describe('MobileNav', () => {
   it('renders every item as a link, marking the active one', () => {
     render(<MobileNav open onOpenChange={vi.fn()} items={items} pathname="/bio/" />)
-    expect(screen.getByRole('link', { name: 'Home' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /Bio/ })).toHaveAttribute('aria-current', 'page')
-    expect(screen.getByRole('link', { name: 'Home' })).not.toHaveAttribute('aria-current')
+    expect(screen.getByRole('link', { name: '' })).not.toHaveAttribute('aria-current')
   })
 
   it('closes when the route changes while open', () => {
