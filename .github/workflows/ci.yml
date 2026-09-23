@@ -35,6 +35,11 @@ jobs:
       - run: pnpm build
         env:
           NEXT_PUBLIC_SITE_URL: https://castiarena.github.io
+          # Placeholders so the e2e job exercises the API path of the contact form. The e2e tests
+          # stub Turnstile and intercept **/api/send, so nothing here is ever contacted.
+          NEXT_PUBLIC_EMAIL_API_URL: https://email-api.invalid
+          NEXT_PUBLIC_EMAIL_API_KEY: pk_test_e2e
+          NEXT_PUBLIC_TURNSTILE_SITE_KEY: 1x00000000000000000000AA
       - run: node scripts/verify-export.mjs
         env:
           VERIFY_STRICT: '0' # agent 3.1 flips this to '1' once sitemap.xml/robots.txt exist
