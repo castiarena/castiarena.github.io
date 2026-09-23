@@ -1,32 +1,7 @@
 import type { Experiment } from './types'
 
-// The owner has not provided the experiments list yet (docs/plan/05-inputs-needed.md).
-// Every `TODO(agustin)` entry is a placeholder to replace; `portfolio-v1` is real.
+// Only real experiments live here; add new ones as they ship (docs/plan/05-inputs-needed.md).
 export const experiments: Experiment[] = [
-  {
-    slug: 'todo-experiment-1',
-    title: 'TODO(agustin): Experiment title',
-    description: 'TODO(agustin): One-line description of the experiment (max 140 characters).',
-    href: 'https://castiarena.github.io/',
-    tags: ['TODO'],
-    year: 2026,
-  },
-  {
-    slug: 'todo-experiment-2',
-    title: 'TODO(agustin): Experiment title',
-    description: 'TODO(agustin): One-line description of the experiment (max 140 characters).',
-    href: 'https://castiarena.github.io/',
-    tags: ['TODO'],
-    year: 2026,
-  },
-  {
-    slug: 'todo-experiment-3',
-    title: 'TODO(agustin): Experiment title',
-    description: 'TODO(agustin): One-line description of the experiment (max 140 characters).',
-    href: 'https://castiarena.github.io/',
-    tags: ['TODO'],
-    year: 2026,
-  },
   {
     slug: 'portfolio-v1',
     title: 'Portfolio v1',
