@@ -17,7 +17,7 @@ function ExperimentRow({ experiment }: { experiment: Experiment }) {
   const content = (
     <>
       <div className="flex min-w-0 flex-col gap-1">
-        <p className={cn('truncate text-[15px] font-semibold', isTodo && 'text-muted-foreground')}>
+        <p className={cn('truncate text-base font-semibold', isTodo && 'text-muted-foreground')}>
           {experiment.title}
         </p>
         <p className="line-clamp-1 text-sm text-muted-foreground">{experiment.description}</p>

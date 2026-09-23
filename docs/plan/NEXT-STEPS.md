@@ -111,6 +111,17 @@ screen:
 
 ## Step 3 — visual polish, one page per iteration
 
+**Done 2026-09-23.** (1) The hero grid is now `minmax(0,1fr) auto` with the text column
+capped at 44rem: the name stays on one line from 1024 to 1440 and the role wraps after
+"Frontend", as in the reference. Mobile is unchanged. (2) `latest-experiments.tsx` uses
+`text-base`, and the 404 numeral uses a new `text-numeral` token (registered in `cn()`, with the
+404 shots pixel-identical before and after). Many other `text-[15px]`/`text-[13px]` sizes remain
+in bio, projects and the form inputs; they're consistent with each other and left alone. (3) The
+`/experiments/` heading is **not** a viewport artefact: `text-h1` caps at 48px from ~1160px up,
+so it's 48px at both 1280 and 1650. The reference heading reads ~8% wider and heavier (≈700 vs
+our spec'd 600). Left as is; changing `--text-h1` would touch every page's h1, so that's
+Agustin's call. Original notes below.
+
 The gate is green and every page matches the reference in structure. These are the
 differences I could see comparing screenshots side by side with the reference. None
 is a blocker; do them one page at a time, re-shooting that page after each.
