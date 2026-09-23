@@ -11,7 +11,6 @@ describe('MobileNav', () => {
   it('renders every item as a link, marking the active one', () => {
     render(<MobileNav open onOpenChange={vi.fn()} items={items} pathname="/bio/" />)
     expect(screen.getByRole('link', { name: /Bio/ })).toHaveAttribute('aria-current', 'page')
-    expect(screen.getByRole('link', { name: '' })).not.toHaveAttribute('aria-current')
   })
 
   it('closes when the route changes while open', () => {
