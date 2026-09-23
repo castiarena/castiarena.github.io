@@ -14,10 +14,7 @@ export default function NotFound() {
       as="div"
       className="flex min-h-[60vh] flex-col items-center justify-center gap-6 py-16 text-center"
     >
-      <p
-        aria-hidden="true"
-        className="text-signature text-[clamp(5rem,14vw,9rem)] leading-none font-extrabold"
-      >
+      <p aria-hidden="true" className="text-signature text-numeral">
         404
       </p>
       <h1 className="text-h1 font-semibold text-balance">That page moved, or never existed</h1>

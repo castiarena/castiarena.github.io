@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from 'clsx'
 import { extendTailwindMerge } from 'tailwind-merge'
 
-// `text-display`, `text-h1`, `text-h2` and `text-h3` are our own font-size utilities
+// `text-display`, `text-h1`, `text-h2`, `text-h3` and `text-numeral` are our own font-size utilities
 // (`@utility` blocks in globals.css, values in design-build/01-design-tokens.md §3).
 // tailwind-merge only knows Tailwind's built-in scale, so it filed them under text-color and
 // dropped them whenever a colour landed in the same `cn()` call: `cn('text-h1', 'text-brand')`
@@ -10,7 +10,7 @@ import { extendTailwindMerge } from 'tailwind-merge'
 const twMerge = extendTailwindMerge({
   extend: {
     classGroups: {
-      'font-size': [{ text: ['display', 'h1', 'h2', 'h3'] }],
+      'font-size': [{ text: ['display', 'h1', 'h2', 'h3', 'numeral'] }],
     },
   },
 })

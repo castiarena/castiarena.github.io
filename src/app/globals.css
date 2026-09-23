@@ -51,6 +51,7 @@
   --text-h1: clamp(2rem, 1.4rem + 2.2vw, 3rem);
   --text-h2: clamp(1.375rem, 1.1rem + 1vw, 1.75rem);
   --text-h3: 1.0625rem;
+  --text-numeral: clamp(5rem, 14vw, 9rem);
 
   /* Motion budget (01 §6) */
   --dur-ui: 200ms;
@@ -226,6 +227,13 @@
   font-size: var(--text-h3);
   font-weight: 600;
   line-height: 1.3;
+}
+
+/* One-off oversized numeral (the 404), bigger than the display step. */
+@utility text-numeral {
+  font-size: var(--text-numeral);
+  font-weight: 800;
+  line-height: 1;
 }
 
 /* ----------------------------------------------------------------- base */

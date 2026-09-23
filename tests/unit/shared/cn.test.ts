@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils'
 // them as text *colours* and dropped them from any `cn()` call that also carried a colour. Every
 // StatTile number and every tinted heading rendered at body size, with nothing failing.
 describe('cn', () => {
-  it.each(['text-display', 'text-h1', 'text-h2', 'text-h3'])(
+  it.each(['text-display', 'text-h1', 'text-h2', 'text-h3', 'text-numeral'])(
     'keeps %s when a text colour is merged in',
     (size) => {
       const result = cn(size, 'text-muted-foreground')

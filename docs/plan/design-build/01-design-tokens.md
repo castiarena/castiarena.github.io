@@ -80,6 +80,7 @@ Fonts: **Geist Sans** (UI, body, headings) and **Geist Mono** (dates, tags, coun
 | `--text-h1` | `clamp(2rem, 1.4rem + 2.2vw, 3rem)` **(from design)** | 600 · `-0.02em` |
 | `--text-h2` | `clamp(1.375rem, 1.1rem + 1vw, 1.75rem)` **(from design)** | 600 · `-0.015em` |
 | `--text-h3` | `1.0625rem` | 600 |
+| `--text-numeral` | `clamp(5rem, 14vw, 9rem)` | 800 · 404 numeral only |
 | body | `1rem` / `1.65` **(from design)** | 400 · measure 46–68ch **(from design)** |
 | small | `0.875rem` / `1.55` | secondary copy, card summaries |
 | mono-meta | `0.75rem` / `1.4` · `0.06em` uppercase for eyebrows | dates, tags, counts, eyebrows, footer |

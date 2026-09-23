@@ -20,8 +20,8 @@ import { profile } from '@/content'
 export function Hero() {
   return (
     <section className="bg-hero-mesh relative overflow-hidden">
-      <div className="container-page grid gap-10 py-16 sm:py-20 lg:grid-cols-2 lg:items-center lg:gap-16 lg:py-24">
-        <div className="order-2 flex flex-col gap-6 lg:order-1 lg:max-w-[620px]">
+      <div className="container-page grid gap-10 py-16 sm:py-20 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-16 lg:py-24">
+        <div className="order-2 flex min-w-0 flex-col gap-6 lg:order-1 lg:max-w-[44rem]">
           <p className="flex items-center gap-1.5 font-mono text-xs tracking-[0.08em] text-muted-foreground uppercase">
             <MapPin aria-hidden="true" className="size-3" />
             {profile.location}
