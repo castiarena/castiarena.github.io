@@ -98,7 +98,17 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={form.handleSubmit(onValid)} noValidate className="flex flex-col gap-6">
+    // `handleSubmit(onValid)` is evaluated during render, and the React Compiler can't tell that
+    // `onValid` only runs later — it reads `mountedAtRef` and calls `Date.now()`, both of which it
+    // has to assume could happen during render (react-hooks/refs, react-hooks/purity). Building the
+    // submit handler inside the event callback keeps those reads provably outside render.
+    <form
+      onSubmit={(event) => {
+        void form.handleSubmit(onValid)(event)
+      }}
+      noValidate
+      className="flex flex-col gap-6"
+    >
       <fieldset disabled={submitting} aria-busy={submitting} className="flex flex-col gap-6">
         <FieldGroup>
           <Field data-invalid={Boolean(form.formState.errors.name) || undefined}>
@@ -181,10 +191,10 @@ export function ContactForm() {
         </Button>
       </div>
 
-      <p className="hairline-t pt-4 font-mono text-xs text-muted-foreground">
-        No server on GitHub Pages: posts to NEXT_PUBLIC_FORM_ENDPOINT when set, otherwise the
-        button becomes &ldquo;Open email app&rdquo; and builds a mailto:. Honeypot field and a 3s
-        minimum keep bots out.
+      <p className="pt-4 font-mono text-xs text-muted-foreground hairline-t">
+        No server on GitHub Pages: posts to NEXT_PUBLIC_FORM_ENDPOINT when set, otherwise the button
+        becomes &ldquo;Open email app&rdquo; and builds a mailto:. Honeypot field and a 3s minimum
+        keep bots out.
       </p>
     </form>
   )

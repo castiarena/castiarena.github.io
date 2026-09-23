@@ -1,4 +1,5 @@
 import { ArrowRight } from 'lucide-react'
+import type { Route } from 'next'
 import Link from 'next/link'
 
 import { Stagger, StaggerItem } from '@/components/motion'
@@ -21,7 +22,7 @@ export function SelectedProjects() {
         <div className="flex flex-wrap items-baseline justify-between gap-4">
           <SectionHeading title="Selected projects" />
           <Link
-            href="/projects/"
+            href={'/projects/' as Route}
             className="group inline-flex items-center gap-1 text-sm font-medium text-brand"
           >
             All projects

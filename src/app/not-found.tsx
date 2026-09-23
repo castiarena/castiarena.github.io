@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Route } from 'next'
 import Link from 'next/link'
 
 import { Container } from '@/components/shared'
@@ -30,10 +30,10 @@ export default function NotFound() {
           <Link href="/">Home</Link>
         </Button>
         <Button asChild variant="outline">
-          <Link href="/projects/">Projects</Link>
+          <Link href={'/projects/' as Route}>Projects</Link>
         </Button>
         <Button asChild variant="outline">
-          <Link href="/experiments/">Experiments</Link>
+          <Link href={'/experiments/' as Route}>Experiments</Link>
         </Button>
       </div>
     </Container>

@@ -17,12 +17,7 @@ function ExperimentRow({ experiment }: { experiment: Experiment }) {
   const content = (
     <>
       <div className="flex min-w-0 flex-col gap-1">
-        <p
-          className={cn(
-            'truncate text-[15px] font-semibold',
-            isTodo && 'text-muted-foreground',
-          )}
-        >
+        <p className={cn('truncate text-[15px] font-semibold', isTodo && 'text-muted-foreground')}>
           {experiment.title}
         </p>
         <p className="line-clamp-1 text-sm text-muted-foreground">{experiment.description}</p>
@@ -63,7 +58,7 @@ export function LatestExperiments() {
         <div className="flex flex-wrap items-baseline justify-between gap-4">
           <SectionHeading title="Latest experiments" />
           <Link
-            href="/experiments/"
+            href={'/experiments/' as Route}
             className="group inline-flex items-center gap-1 text-sm font-medium text-brand"
           >
             All experiments

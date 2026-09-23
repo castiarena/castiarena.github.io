@@ -1,5 +1,6 @@
 import { ArrowRight, MapPin } from 'lucide-react'
 import Image from 'next/image'
+import type { Route } from 'next'
 import Link from 'next/link'
 
 import { ContactDialog } from '@/components/contact'
@@ -18,7 +19,7 @@ import { profile } from '@/content'
  */
 export function Hero() {
   return (
-    <section className="relative overflow-hidden bg-hero-mesh">
+    <section className="bg-hero-mesh relative overflow-hidden">
       <div className="container-page grid gap-10 py-16 sm:py-20 lg:grid-cols-2 lg:items-center lg:gap-16 lg:py-24">
         <div className="order-2 flex flex-col gap-6 lg:order-1 lg:max-w-[620px]">
           <p className="flex items-center gap-1.5 font-mono text-xs tracking-[0.08em] text-muted-foreground uppercase">
@@ -40,13 +41,13 @@ export function Hero() {
             </StaggerItem>
             <StaggerItem className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Button asChild size="lg" className="w-full sm:w-auto">
-                <Link href="/projects/">
+                <Link href={'/projects/' as Route}>
                   View projects
                   <ArrowRight data-position="end" aria-hidden="true" />
                 </Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
-                <Link href="/bio/">Read bio</Link>
+                <Link href={'/bio/' as Route}>Read bio</Link>
               </Button>
               <ContactDialog
                 trigger={
