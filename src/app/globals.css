@@ -35,6 +35,10 @@
   --brand-3: oklch(0.66 0.24 305);
   --brand-4: oklch(0.66 0.21 285);
   --brand-foreground: oklch(0.99 0 0);
+  /* Brand text on a *tinted brand* fill (the `brand` badge: text --brand on --brand/15%). --brand
+     itself only reaches 3.59:1 there, because the tint darkens the surface under it. Lightness
+     only, same rule as --brand-foreground; clears 4.87:1 on the worst surface (--muted). */
+  --brand-ink: oklch(0.49 0.19 256);
 
   /* Layout */
   --container: 72rem;
@@ -75,6 +79,9 @@
   /* White (0.99, the spec value) only clears 3.45:1 against this brand fill. Darkened, lightness
      only, to clear 4.5:1 — see 01 §1 note and docs/handoffs/F1.md. */
   --brand-foreground: oklch(0.15 0 0);
+  /* See the light theme's note: --brand on --brand/15% falls to 4.20:1 over --muted here.
+     Lightened to clear 4.83:1 on the worst surface. */
+  --brand-ink: oklch(0.665 0.19 256);
 }
 
 .light {
@@ -98,6 +105,7 @@
   /* Not in the §9 snippet verbatim — added so `bg-brand text-brand-foreground` (the solid-fill
      pattern every brand-coloured surface needs) resolves. See docs/handoffs/F1.md. */
   --color-brand-foreground: var(--brand-foreground);
+  --color-brand-ink: var(--brand-ink);
   --color-destructive: var(--destructive);
   --color-warning: var(--warning);
 
