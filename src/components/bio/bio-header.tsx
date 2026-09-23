@@ -40,7 +40,10 @@ export function BioHeader({ profile }: BioHeaderProps) {
           >
             <Download aria-hidden="true" />
             Download CV
-            <span className="font-mono text-xs opacity-90">PDF · 1.6 MB</span>
+            {/* 03-page-specs.md calls for 90% opacity here, but that drops light-theme
+                brand-foreground/brand contrast below 4.5:1 (axe: serious color-contrast) — the
+                mono/size distinction alone still reads as secondary without it. */}
+            <span className="font-mono text-xs">PDF · 1.6 MB</span>
           </a>
           {linkedin ? (
             <a
