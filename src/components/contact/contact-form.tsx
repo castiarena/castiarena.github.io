@@ -233,12 +233,6 @@ export function ContactForm() {
           Copy email
         </Button>
       </div>
-
-      <p className="pt-4 font-mono text-xs text-muted-foreground hairline-t">
-        No server on GitHub Pages: sends through my email API (NEXT_PUBLIC_EMAIL_API_URL) behind a
-        Cloudflare Turnstile check when configured, otherwise the button becomes &ldquo;Open email
-        app&rdquo; and builds a mailto:. Turnstile, a honeypot field and a 3s minimum keep bots out.
-      </p>
     </form>
   )
 }
