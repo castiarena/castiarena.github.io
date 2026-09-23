@@ -39,16 +39,15 @@ export function ProjectDetail({ project, prev, next }: ProjectDetailProps) {
 
       <ProjectHero project={project} />
 
-      <div className="relative aspect-[16/10] w-full overflow-hidden rounded-lg bg-muted sm:aspect-[21/9]">
+      <div className="relative aspect-[16/10] w-full overflow-hidden rounded-lg sm:aspect-[21/9]">
         <Image
           src={project.cover.src}
           alt={project.cover.alt}
           fill
           sizes="100vw"
-          // `contain`, not `cover`: the placeholder SVGs are natively 16:10 with the project
-          // title baked into the artwork — `cover` would crop that text at the 21:9 desktop
-          // ratio here. `bg-muted` above fills the letterbox gap.
-          className="object-contain"
+          // `cover`: the placeholder SVGs are flat gradients with nothing to crop, so the artwork
+          // fills the frame edge to edge as reference screen 07 shows.
+          className="object-cover"
           priority
         />
       </div>

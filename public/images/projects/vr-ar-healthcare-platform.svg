@@ -5,10 +5,6 @@
       <stop offset="0%" stop-color="oklch(0.66 0.21 285)" />
       <stop offset="100%" stop-color="oklch(0.63 0.19 256)" />
     </linearGradient>
-    <linearGradient id="scrim" x1="0%" y1="100%" x2="0%" y2="0%">
-      <stop offset="0%" stop-color="oklch(0 0 0 / 0.55)" />
-      <stop offset="45%" stop-color="oklch(0 0 0 / 0)" />
-    </linearGradient>
     <filter id="hue">
       <feColorMatrix type="hueRotate" values="-14" />
     </filter>
@@ -16,6 +12,4 @@
   <g filter="url(#hue)">
     <rect width="1600" height="1000" fill="url(#g)" />
   </g>
-  <rect width="1600" height="1000" fill="url(#scrim)" />
-  <text font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700" font-size="48" fill="oklch(0.99 0 0 / 0.92)" letter-spacing="-1"><tspan x="64" y="936">TODO(agustin): VR/AR healthcare platform</tspan></text>
 </svg>

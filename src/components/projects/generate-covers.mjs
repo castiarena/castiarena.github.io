@@ -46,7 +46,6 @@ export function getCoverGradientStops(seed) {
 
 const WIDTH = 1600
 const HEIGHT = 1000
-const PADDING = 64
 
 function escapeXml(value) {
   return value.replace(/[&<>"']/g, (char) => {
@@ -65,49 +64,17 @@ function escapeXml(value) {
   })
 }
 
-/** Greedy word wrap by estimated glyph width, capped at 3 lines (the 4th line collapses into "…"). */
-function wrapTitle(title, fontSize, maxWidth) {
-  const avgCharWidth = fontSize * 0.56
-  const maxChars = Math.max(1, Math.floor(maxWidth / avgCharWidth))
-  const words = title.split(/\s+/).filter(Boolean)
-  const lines = []
-  let current = ''
-
-  for (const word of words) {
-    const candidate = current ? `${current} ${word}` : word
-    if (candidate.length > maxChars && current) {
-      lines.push(current)
-      current = word
-    } else {
-      current = candidate
-    }
-  }
-  if (current) lines.push(current)
-
-  if (lines.length <= 3) return lines
-  return [...lines.slice(0, 2), `${lines[2].slice(0, maxChars - 1)}…`]
-}
-
-function fontSizeFor(title) {
-  if (title.length <= 20) return 88
-  if (title.length <= 35) return 64
-  if (title.length <= 55) return 48
-  return 36
-}
-
+/**
+ * Gradient only — no title text, no scrim.
+ *
+ * The first version baked the project title into the artwork, which put the title on screen twice
+ * (once in the SVG, once as the card's real heading) and forced `object-contain` at every ratio
+ * other than 16:10, letterboxing the cover inside a `bg-muted` band. Reference screens 06 and 07
+ * show the covers as flat edge-to-edge gradients, so the text is gone and the components use
+ * `object-cover`. The accessible name still lives on the SVG for anything that loads it directly.
+ */
 function buildSvg(slug, title) {
   const { from, to, hueRotate } = getCoverGradientStops(slug)
-  const fontSize = fontSizeFor(title)
-  const lines = wrapTitle(title, fontSize, WIDTH - PADDING * 2)
-  const lineHeight = fontSize * 1.15
-  const startY = HEIGHT - PADDING - (lines.length - 1) * lineHeight
-
-  const textLines = lines
-    .map(
-      (line, index) =>
-        `<tspan x="${PADDING}" y="${startY + index * lineHeight}">${escapeXml(line)}</tspan>`,
-    )
-    .join('')
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${HEIGHT}" viewBox="0 0 ${WIDTH} ${HEIGHT}" role="img" aria-label="${escapeXml(title)}">
   <title>${escapeXml(title)}</title>
@@ -116,10 +83,6 @@ function buildSvg(slug, title) {
       <stop offset="0%" stop-color="${BRAND_RAMP[from]}" />
       <stop offset="100%" stop-color="${BRAND_RAMP[to]}" />
     </linearGradient>
-    <linearGradient id="scrim" x1="0%" y1="100%" x2="0%" y2="0%">
-      <stop offset="0%" stop-color="oklch(0 0 0 / 0.55)" />
-      <stop offset="45%" stop-color="oklch(0 0 0 / 0)" />
-    </linearGradient>
     <filter id="hue">
       <feColorMatrix type="hueRotate" values="${hueRotate}" />
     </filter>
@@ -127,8 +90,6 @@ function buildSvg(slug, title) {
   <g filter="url(#hue)">
     <rect width="${WIDTH}" height="${HEIGHT}" fill="url(#g)" />
   </g>
-  <rect width="${WIDTH}" height="${HEIGHT}" fill="url(#scrim)" />
-  <text font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700" font-size="${fontSize}" fill="oklch(0.99 0 0 / 0.92)" letter-spacing="-1">${textLines}</text>
 </svg>
 `
 }

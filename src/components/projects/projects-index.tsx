@@ -63,7 +63,7 @@ function ProjectIndexRow({ project, index, reversed }: ProjectIndexRowProps) {
 
         <div
           className={cn(
-            'relative order-1 aspect-[16/10] overflow-hidden rounded-lg bg-muted lg:aspect-[4/3] lg:basis-7/12',
+            'relative order-1 aspect-[16/10] overflow-hidden rounded-lg lg:aspect-[4/3] lg:basis-7/12',
             reversed ? 'lg:order-2' : 'lg:order-1',
           )}
         >
@@ -79,10 +79,9 @@ function ProjectIndexRow({ project, index, reversed }: ProjectIndexRowProps) {
                 alt={project.cover.alt}
                 fill
                 sizes="(min-width: 1024px) 58vw, 100vw"
-                // `contain`, not `cover`: the generated placeholder SVGs are natively 16:10 and
-                // bake the project title into the artwork (U5 task 1) — `cover` would crop that
-                // text at this row's 4:3 desktop ratio. `bg-muted` above fills the letterbox gap.
-                className="object-contain"
+                // `cover`: the placeholder SVGs are flat gradients with nothing to crop, so the
+                // artwork fills the frame edge to edge as reference screen 06 shows.
+                className="object-cover"
               />
             </div>
           </ParallaxLayer>
