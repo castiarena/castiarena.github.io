@@ -71,8 +71,17 @@ function Button({
       className={cn(buttonVariants({ variant, size, className }), loading && 'opacity-90')}
       {...props}
     >
-      {loading ? <Loader2Icon className="animate-spin" aria-hidden="true" /> : null}
-      {children}
+      {/* Two JSX children are an array even when the first is `null`, and Slot requires exactly
+          one child — so `asChild` has to pass `children` through untouched or it throws. A
+          link-shaped button has no loading state; `loading` still sets aria-busy and disabled. */}
+      {asChild ? (
+        children
+      ) : (
+        <>
+          {loading ? <Loader2Icon className="animate-spin" aria-hidden="true" /> : null}
+          {children}
+        </>
+      )}
     </Comp>
   )
 }

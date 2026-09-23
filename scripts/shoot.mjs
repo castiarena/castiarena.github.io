@@ -8,7 +8,7 @@
 //   node scripts/shoot.mjs --route /bio/ --out docs/handoffs/assets/U3
 //
 // Flags:
-//   --route <path>      required, e.g. /bio/ or /styleguide/
+//   --route <path>      required, e.g. /bio/ or /projects/
 //   --out <dir>          required, created if missing
 //   --base-url <url>     default http://localhost:4173
 //

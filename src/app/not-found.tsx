@@ -1,21 +1,38 @@
-import type { Metadata } from 'next'
+import type { Metadata, Route } from 'next'
 import Link from 'next/link'
 
-import { PageHeader } from '@/components/shared'
+import { Container } from '@/components/shared'
+import { Button } from '@/components/ui/button'
 
 export const metadata: Metadata = {
   title: 'Page not found',
 }
 
-// STUB — implemented by agent 2.1
 export default function NotFound() {
   return (
-    <>
-      <PageHeader
-        title="Page not found"
-        description="The page you are looking for does not exist."
-      />
-      <Link href="/">Back to home</Link>
-    </>
+    <Container
+      as="div"
+      className="flex min-h-[60vh] flex-col items-center justify-center gap-6 py-16 text-center"
+    >
+      <p aria-hidden="true" className="text-signature text-numeral">
+        404
+      </p>
+      <h1 className="text-h1 font-semibold text-balance">That page moved, or never existed</h1>
+      <p className="max-w-[46ch] text-base text-pretty text-muted-foreground">
+        The old Vite site lives on the <code className="font-mono">legacy-v1</code> tag, so a few
+        links from it no longer resolve here.
+      </p>
+      <div className="flex flex-col gap-3 sm:flex-row">
+        <Button asChild>
+          <Link href="/">Home</Link>
+        </Button>
+        <Button asChild variant="outline">
+          <Link href={'/projects/' as Route}>Projects</Link>
+        </Button>
+        <Button asChild variant="outline">
+          <Link href={'/experiments/' as Route}>Experiments</Link>
+        </Button>
+      </div>
+    </Container>
   )
 }

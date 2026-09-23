@@ -103,9 +103,11 @@ describe('profile, achievements, skills and courses match the CV', () => {
           .map((cell) => cell.trim())
           .filter(Boolean),
       )
+    // Titles are sentence case on the site (design reference); the CV uses Title Case.
+    const sentenceCase = (title: string) => title.charAt(0) + title.slice(1).toLowerCase()
     expect(
       achievements.map((a) => [a.title, `${a.metric.value}${a.metric.unit}`, a.description]),
-    ).toEqual(rows)
+    ).toEqual(rows.map(([title = '', ...rest]) => [sentenceCase(title), ...rest]))
   })
 
   it('uses the skills in CV order', () => {
@@ -134,8 +136,8 @@ describe('project placeholders', () => {
   it.each(projects.map((project) => [project.slug, project] as const))(
     '%s: every sentence is from the CV or marked TODO(agustin)',
     (_slug, project) => {
+      // Titles are owner-approved and exempt; every other sentence must be traceable.
       const sentences = [
-        project.title,
         project.summary,
         project.problem,
         ...project.approach,

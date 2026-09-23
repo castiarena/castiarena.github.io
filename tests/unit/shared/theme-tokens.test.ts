@@ -19,7 +19,7 @@ import { describe, expect, it } from 'vitest'
  */
 
 const COLOR_TOKEN_PATTERN =
-  '(background|foreground|card(?:-foreground)?|popover(?:-foreground)?|primary(?:-foreground)?|secondary(?:-foreground)?|muted(?:-foreground)?|accent(?:-foreground)?|destructive|warning|border|input|ring|brand(?:-2|-3|-4)?(?:-foreground)?)'
+  '(background|foreground|card(?:-foreground)?|popover(?:-foreground)?|primary(?:-foreground)?|secondary(?:-foreground)?|muted(?:-foreground)?|accent(?:-foreground)?|destructive|warning|border|input|ring|brand(?:-2|-3|-4|-ink)?(?:-foreground)?)'
 
 const COLOR_UTILITY_PREFIXES = [
   'bg',

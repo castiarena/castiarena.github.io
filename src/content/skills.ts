@@ -1,29 +1,30 @@
 import type { Achievement, Course, SkillGroup } from './types'
 
 // Source: docs/plan/assets/cv-content.md ("Key Achievements", "Skills", "Training / Courses").
-// `metric.label` is a short caption derived from the CV description.
+// `metric.label` is a short caption derived from the CV description. Titles are sentence case
+// (the CV uses Title Case) to match the design reference.
 export const achievements: Achievement[] = [
   {
     id: 'scalability',
-    title: 'Scalability Enhancement',
+    title: 'Scalability enhancement',
     metric: { value: 35, unit: '%', label: 'platform scalability' },
     description: 'Increased platform scalability by 35% through microservices architecture.',
   },
   {
     id: 'code-review',
-    title: 'Code Review Optimization',
+    title: 'Code review optimization',
     metric: { value: 40, unit: '%', label: 'less code review time' },
     description: 'Reduced code review time by 40% with AI-assisted workflow.',
   },
   {
     id: 'stakeholder-satisfaction',
-    title: 'Stakeholder Satisfaction Achievement',
+    title: 'Stakeholder satisfaction achievement',
     metric: { value: 98, unit: '%', label: 'stakeholder satisfaction' },
     description: 'Led team that delivered 98% stakeholder satisfaction.',
   },
   {
     id: 'frontend-performance',
-    title: 'Frontend Optimization',
+    title: 'Frontend optimization',
     metric: { value: 25, unit: '%', label: 'faster load times' },
     description: 'Improved frontend load times by 25% with UI optimizations.',
   },
