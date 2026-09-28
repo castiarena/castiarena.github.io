@@ -18,6 +18,18 @@ describe('ProjectCard', () => {
     expect(link).toHaveTextContent(project.summary)
   })
 
+  it('renders the project cover image as decoration', () => {
+    const { container } = render(
+      <ProjectCard
+        project={makeProject({ cover: { src: '/images/projects/x.webp', alt: 'X' } })}
+      />,
+    )
+    const img = container.querySelector('img')
+    // Unit tests don't load next.config's `unoptimized`, so the loader URL-encodes the path.
+    expect(decodeURIComponent(img?.getAttribute('src') ?? '')).toContain('/images/projects/x.webp')
+    expect(img).toHaveAttribute('alt', '')
+  })
+
   it('renders the mono index over the cover, zero-padded', () => {
     render(<ProjectCard project={makeProject()} index={7} />)
     expect(screen.getByText('07')).toBeInTheDocument()
