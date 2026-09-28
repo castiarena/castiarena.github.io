@@ -4,6 +4,7 @@ import type { ReactNode } from 'react'
 import { SiteFooter, SiteHeader, SkipLink, ThemeProvider } from '@/components/layout'
 import { MotionProvider } from '@/components/motion'
 import { geistMono, geistSans } from '@/components/shared/fonts'
+import { PersonJsonLd } from '@/components/shared'
 import { Toaster } from '@/components/ui/sonner'
 import { siteConfig } from '@/config/site'
 
@@ -48,6 +49,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       className={`${geistSans.variable} ${geistMono.variable}`}
     >
       <body className="min-h-dvh bg-background font-sans text-foreground antialiased">
+        <PersonJsonLd />
         <ThemeProvider>
           <MotionProvider>
             <SkipLink />

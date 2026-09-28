@@ -1,0 +1,37 @@
+# Agustin Castiarena
+
+> Senior Frontend Engineer with 10+ years building and evolving modern web applications across e-commerce, media, healthcare, and insurance. Based in Trevelin, Patagonia, Argentina.
+
+Personal portfolio: bio, work history, projects and web experiments. This file follows the [llms.txt](https://llmstxt.org) convention so AI assistants can read a concise, accurate summary instead of parsing rendered HTML. It is hand-maintained and may lag the live site by a little; treat `/bio/`, `/projects/` and `/experiments/` as the source of truth for anything time-sensitive.
+
+## Bio
+
+- [Bio](https://castiarena.github.io/bio/): Full background — summary, work history timeline, key achievements, skills and training. CV: [PDF](https://castiarena.github.io/cv/agustin-castiarena-resume.pdf).
+
+Focus areas: React ecosystems, GraphQL-based architectures, performance optimization, developer experience, and technical leadership (mentoring, hiring, cross-functional delivery). Led frontend architecture and modernization work on business-critical products.
+
+Recent roles (newest first):
+
+- Senior Fullstack Engineer, Riverside.fm (2023–2026) — Recording Studio platform architecture, GraphQL-powered microservices, livestream integrations, AI-assisted engineering workflows.
+- Frontend Team Lead, Realworld One (2021–2023) — client-facing VR/AR healthcare platform, team growth and delivery planning.
+- Senior Frontend Engineer, Westwing Home & Living (2020–2021) — micro frontend architecture migration, shared UI kit.
+- Fullstack Engineer, AXA (2018–2019) — JavaScript-to-TypeScript migration, BDD/Gherkin end-to-end testing.
+- Senior Frontend Engineer, Mercado Libre (2015–2018) — purchase flow across Latin American markets, large-scale E2E test suite.
+
+## Projects
+
+- [Projects](https://castiarena.github.io/projects/): Case studies with role, stack, approach and outcomes. Most write-ups are still placeholders pending publishable detail (much of the underlying work is under NDA) — the CV-derived summaries below are accurate; treat any "TODO" text on the live pages as not yet final.
+  - [Recording Studio architecture](https://castiarena.github.io/projects/recording-studio-architecture/): Decomposed core business logic into GraphQL-powered microservices at Riverside.fm, enabling a more modular platform architecture.
+  - [VR/AR healthcare platform](https://castiarena.github.io/projects/vr-ar-healthcare-platform/): Built and evolved a client-facing VR/AR healthcare platform at Realworld One.
+  - [Micro frontend migration](https://castiarena.github.io/projects/micro-frontend-migration/): Led frontend work in Westwing's migration to a decentralized micro frontend architecture.
+
+## Experiments
+
+- [Experiments](https://castiarena.github.io/experiments/): Smaller, self-contained web experiments and side projects.
+
+## Contact
+
+- Email: castiarena@gmail.com
+- LinkedIn: https://linkedin.com/in/agustin-castiarena
+- GitHub: https://github.com/castiarena
+- Site source: https://github.com/castiarena/castiarena.github.io

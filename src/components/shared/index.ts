@@ -12,3 +12,4 @@ export {
   type CoverGradientStops,
 } from './cover-gradient'
 export { ProseList, type ProseListProps } from './prose-list'
+export { PersonJsonLd } from './person-json-ld'
