@@ -1,5 +1,17 @@
 import AxeBuilder from '@axe-core/playwright'
-import { expect, test } from '@playwright/test'
+import { expect, test, type Locator } from '@playwright/test'
+
+/** Resolves once every finite CSS transition/animation inside `locator` has finished. */
+async function settleAnimations(locator: Locator) {
+  await locator.evaluate((el) =>
+    Promise.all(
+      el
+        .getAnimations({ subtree: true })
+        .filter((animation) => animation.effect?.getComputedTiming().endTime !== Infinity)
+        .map((animation) => animation.finished),
+    ),
+  )
+}
 
 // Stands in for Cloudflare's script: renders a placeholder and issues a fake token straight away,
 // so no real challenge (or network) is involved.
@@ -54,6 +66,9 @@ test('contact dialog sends through the email API and passes axe', async ({ page 
 
   const send = dialog.getByRole('button', { name: 'Send message' })
   await expect(send).toBeEnabled() // the stubbed Turnstile token has arrived
+  // The button fades from `disabled:opacity-50` to full opacity (`transition-all`); axe measuring
+  // mid-fade sees blended colours and reports a false contrast failure. Let it settle first.
+  await settleAnimations(dialog)
 
   const axe = await new AxeBuilder({ page }).include('[role="dialog"]').analyze()
   expect(axe.violations).toEqual([])
@@ -74,6 +89,7 @@ test('contact dialog sends through the email API and passes axe', async ({ page 
     captcha_token: 'e2e-token',
   })
 
+  await settleAnimations(dialog)
   const axeAfter = await new AxeBuilder({ page }).include('[role="dialog"]').analyze()
   expect(axeAfter.violations).toEqual([])
 })
