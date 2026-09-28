@@ -137,21 +137,34 @@ describe('profile, achievements, skills and courses match the CV', () => {
 
 describe('project placeholders', () => {
   const TODO = 'TODO(agustin):'
+  // Case studies the owner wrote themselves; their copy is not CV-derived.
+  const ownerProvided = new Set(['exporter'])
+  const sentencesOf = (project: (typeof projects)[number]) => [
+    project.summary,
+    project.problem,
+    ...project.approach,
+    ...project.outcomes,
+    project.cover.alt,
+    ...(project.gallery ?? []).map((image) => image.alt),
+  ]
 
-  it.each(projects.map((project) => [project.slug, project] as const))(
-    '%s: every sentence is from the CV or marked TODO(agustin)',
-    (_slug, project) => {
-      // Titles are owner-approved and exempt; every other sentence must be traceable.
-      const sentences = [
-        project.summary,
-        project.problem,
-        ...project.approach,
-        ...project.outcomes,
-        project.cover.alt,
-      ]
-      const unmarked = sentences.filter((s) => !s.startsWith(TODO) && !cvSentences.has(s))
-      expect(unmarked).toEqual([])
-      expect(cvRoles.map((role) => role.title)).toContain(project.role)
+  it.each(
+    projects
+      .filter((project) => !ownerProvided.has(project.slug))
+      .map((project) => [project.slug, project] as const),
+  )('%s: every sentence is from the CV or marked TODO(agustin)', (_slug, project) => {
+    // Titles are owner-approved and exempt; every other sentence must be traceable.
+    const unmarked = sentencesOf(project).filter((s) => !s.startsWith(TODO) && !cvSentences.has(s))
+    expect(unmarked).toEqual([])
+    expect(cvRoles.map((role) => role.title)).toContain(project.role)
+  })
+
+  it.each([...ownerProvided].map((slug) => [slug] as const))(
+    '%s: owner-provided case study has no TODO(agustin) markers',
+    (slug) => {
+      const project = projects.find((p) => p.slug === slug)
+      expect(project).toBeDefined()
+      expect(sentencesOf(project!).filter((s) => s.includes(TODO))).toEqual([])
     },
   )
 })

@@ -92,10 +92,12 @@ describe('validateContent', () => {
     const content = realContent()
     content.experiments[0]!.href = 'not a url'
     content.experiences[0]!.companyUrl = 'javascript:alert(1)'
+    content.projects[0]!.links.website = '/exporter/'
 
     const message = errorOf(content)
     expect(message).toContain('experiments[0].href')
     expect(message).toContain('experiences[0].companyUrl')
+    expect(message).toContain('projects[0].links.website')
   })
 
   it('rejects an Email social link that is not mailto:', () => {

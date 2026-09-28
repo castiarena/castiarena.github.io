@@ -158,6 +158,8 @@ export const projectSchema = z.object({
   gallery: z.array(image).optional(),
   links: z.object({
     live: webUrl.optional(),
+    liveLabel: z.string().min(1).optional(),
+    website: webUrl.optional(),
     repo: webUrl.optional(),
     caseStudy: webUrl.optional(),
   }),
