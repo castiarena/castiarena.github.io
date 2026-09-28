@@ -64,6 +64,8 @@ export const projects: Project[] = [
     ],
     links: {
       live: 'https://chromewebstore.google.com/detail/kjhjfmochmbifcddibchbmgadejpmbhh',
+      liveLabel: 'Add to Chrome',
+      website: 'https://castiarena.github.io/exporter/',
       repo: 'https://github.com/castiarena/exporter-source',
     },
     featured: true,

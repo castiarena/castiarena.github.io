@@ -56,7 +56,10 @@ export interface ProjectHeroProps {
 /** Breadcrumb-adjacent hero: draft badge, title, summary, link buttons, and the meta card. */
 export function ProjectHero({ project }: ProjectHeroProps) {
   const links = [
-    project.links.live ? { label: 'View live', href: project.links.live } : null,
+    project.links.live
+      ? { label: project.links.liveLabel ?? 'View live', href: project.links.live }
+      : null,
+    project.links.website ? { label: 'Website', href: project.links.website } : null,
     project.links.repo ? { label: 'View source', href: project.links.repo } : null,
   ].filter((link): link is { label: string; href: string } => link !== null)
 
