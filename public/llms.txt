@@ -20,7 +20,8 @@ Recent roles (newest first):
 
 ## Projects
 
-- [Projects](https://castiarena.github.io/projects/): Case studies with role, stack, approach and outcomes. Most write-ups are still placeholders pending publishable detail (much of the underlying work is under NDA) — the CV-derived summaries below are accurate; treat any "TODO" text on the live pages as not yet final.
+- [Projects](https://castiarena.github.io/projects/): Case studies with role, stack, approach and outcomes. The exporter write-up is a complete case study. The other three are still placeholders pending publishable detail (much of the underlying work is under NDA) — their CV-derived summaries below are accurate; treat any "TODO" text on their live pages as not yet final.
+  - [exporter Chrome extension](https://castiarena.github.io/projects/exporter/): A Chrome extension that exports any web page, or just the elements you pick, to a clean PDF with selectable text, entirely on-device. Published on the Chrome Web Store.
   - [Recording Studio architecture](https://castiarena.github.io/projects/recording-studio-architecture/): Decomposed core business logic into GraphQL-powered microservices at Riverside.fm, enabling a more modular platform architecture.
   - [VR/AR healthcare platform](https://castiarena.github.io/projects/vr-ar-healthcare-platform/): Built and evolved a client-facing VR/AR healthcare platform at Realworld One.
   - [Micro frontend migration](https://castiarena.github.io/projects/micro-frontend-migration/): Led frontend work in Westwing's migration to a decentralized micro frontend architecture.
