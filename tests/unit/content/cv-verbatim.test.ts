@@ -138,7 +138,7 @@ describe('profile, achievements, skills and courses match the CV', () => {
 describe('project placeholders', () => {
   const TODO = 'TODO(agustin):'
   // Case studies the owner wrote themselves; their copy is not CV-derived.
-  const ownerProvided = new Set(['exporter'])
+  const ownerProvided = new Set(['exporter', 'next-eclipse'])
   const sentencesOf = (project: (typeof projects)[number]) => [
     project.summary,
     project.problem,
