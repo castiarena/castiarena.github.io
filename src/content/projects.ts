@@ -1,7 +1,7 @@
 import type { Project } from './types'
 
-// `exporter` is a real, owner-provided case study: its copy, cover and gallery are final, and its
-// images live in /images/projects/exporter/.
+// `exporter` and `next-eclipse` are real case studies: their copy, cover and gallery are final, and
+// their images live in /images/projects/<slug>/.
 // The other 3 are still placeholders derived from CV themes only (docs/plan/assets/cv-content.md).
 // Rule for those: every sentence NOT taken verbatim from the CV starts with `TODO(agustin):`,
 // except the titles, which the owner approved as real.
@@ -72,6 +72,64 @@ export const projects: Project[] = [
     order: 1,
   },
   {
+    slug: 'next-eclipse',
+    title: 'Next eclipse',
+    summary:
+      'A live countdown to the next solar or lunar eclipse, with a 3D globe showing where on Earth you can see it. Built on NASA eclipse catalogs, precomputed offline, and hosted as a static site.',
+    role: 'Creator & sole developer',
+    period: 'Oct 2026',
+    problem:
+      'Eclipse dates are easy to find, but what you actually want to know is whether you can see this one from where you are. Most sites bury that in tables of coordinates or a static map. I wanted a single screen that counts down to the next eclipse and shows, on a globe you can spin, who gets the show, with no backend to run.',
+    approach: [
+      'Parsed the NASA GSFC eclipse catalogs (Espenak & Meeus) with a Node script into static JSON: a 46-eclipse index plus one geometry file per eclipse, loaded only when that eclipse is shown. A repository interface keeps the UI independent of where the data lives.',
+      'Kept astronomy out of the browser: visibility geometry is precomputed offline, so the client only draws it. Solar eclipses render the central path with its limits and centre line; lunar ones a dot grid coloured by whether the Moon is up for the whole eclipse or only part of it.',
+      'Built the interactive globe with three.js through react-globe.gl: drag to rotate, scroll to zoom, camera turns to face the eclipse. Paths that cross the antimeridian are split so they never draw a line across the planet, and the camera centre averages unit vectors.',
+      'Designed a full-bleed dark layout: the globe fills the desktop screen behind the content, and on mobile the details sit in a glass bottom sheet over it. The globe chunk is lazy-loaded, with a fallback message when WebGL is unavailable.',
+      'Made location opt-in: "Check my location" says whether you are inside the zone, entirely in the browser, and the selected type lives in the URL (?type=lunar) so views are shareable.',
+    ],
+    outcomes: [
+      'No server and no astronomy code in the client: 46 eclipses over the next 10 years served as static JSON',
+      'Countdown, data integrity, geometry, visibility lookups and date formatting covered by 46 Vitest tests',
+      'Location check runs on-device; nothing is sent anywhere',
+      'Deployed to GitHub Pages by a workflow that runs the tests before every deploy',
+      'The source code is private, so this case study describes the build instead of linking to it',
+    ],
+    stack: [
+      'React',
+      'TypeScript',
+      'Vite',
+      'Chakra UI',
+      'three.js',
+      'react-globe.gl',
+      'Vitest',
+      'GitHub Actions',
+      'NASA open data',
+    ],
+    cover: {
+      src: '/images/projects/next-eclipse/cover.webp',
+      alt: 'The Next eclipse site on desktop: a countdown to the 20 February 2027 penumbral lunar eclipse on the left and a 3D globe on the right covered in purple dots over Europe and Africa.',
+    },
+    gallery: [
+      {
+        src: '/images/projects/next-eclipse/01-lunar.webp',
+        alt: 'Lunar view: countdown, magnitude and Saros series beside a globe whose dot grid shows where the Moon is up for the whole eclipse or only part of it.',
+      },
+      {
+        src: '/images/projects/next-eclipse/02-solar.webp',
+        alt: 'Solar view: countdown to the 6 February 2027 annular eclipse and a gold path of annularity crossing South America on the globe.',
+      },
+      {
+        src: '/images/projects/next-eclipse/03-mobile.webp',
+        alt: 'Mobile layout: the countdown above the globe, with a glass bottom sheet over it showing local and UTC time, magnitude and Saros series.',
+      },
+    ],
+    // Source is private, so there is no `repo` link. Add `live`
+    // (https://castiarena.github.io/eclipses/) once the eclipses repo's Pages deploy passes.
+    links: {},
+    featured: true,
+    order: 2,
+  },
+  {
     slug: 'recording-studio-architecture',
     title: 'Recording Studio architecture',
     summary:
@@ -93,7 +151,7 @@ export const projects: Project[] = [
     },
     links: {},
     featured: true,
-    order: 2,
+    order: 3,
   },
   {
     slug: 'vr-ar-healthcare-platform',
@@ -120,7 +178,7 @@ export const projects: Project[] = [
     },
     links: {},
     featured: true,
-    order: 3,
+    order: 4,
   },
   {
     slug: 'micro-frontend-migration',
@@ -144,6 +202,6 @@ export const projects: Project[] = [
     },
     links: {},
     featured: true,
-    order: 4,
+    order: 5,
   },
 ]
