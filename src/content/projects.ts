@@ -123,9 +123,10 @@ export const projects: Project[] = [
         alt: 'Mobile layout: the countdown above the globe, with a glass bottom sheet over it showing local and UTC time, magnitude and Saros series.',
       },
     ],
-    // Source is private, so there is no `repo` link. Add `live`
-    // (https://castiarena.github.io/eclipses/) once the eclipses repo's Pages deploy passes.
-    links: {},
+    // Source is private, so there is no `repo` link.
+    links: {
+      live: 'https://castiarena.github.io/eclipses/',
+    },
     featured: true,
     order: 2,
   },
