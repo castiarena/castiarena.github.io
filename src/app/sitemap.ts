@@ -15,6 +15,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly' as const,
       priority: 0.8,
     })),
+    // Footer-only route, so it isn't in `siteConfig.nav` — still worth indexing.
+    { url: `${siteConfig.url}/privacy/`, changeFrequency: 'yearly', priority: 0.3 },
   ]
 
   const projectRoutes: MetadataRoute.Sitemap = projects.map((project) => ({

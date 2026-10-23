@@ -1,8 +1,10 @@
 'use client'
 
+import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 import { Container, ExternalLink } from '@/components/shared'
+import { openConsentBanner } from '@/lib/analytics'
 import { profile } from '@/content'
 import { siteConfig } from '@/config/site'
 
@@ -40,6 +42,18 @@ export function SiteFooter() {
               {social.label}
             </ExternalLink>
           ))}
+          <Link href="/privacy" className="text-brand underline-offset-4 hover:underline">
+            Privacy
+          </Link>
+          {/* The only way back to the banner once a choice is stored, so it lives next to the
+              policy it belongs to rather than inside it. */}
+          <button
+            type="button"
+            onClick={openConsentBanner}
+            className="cursor-pointer text-brand underline-offset-4 hover:underline"
+          >
+            Cookie preferences
+          </button>
         </div>
       </Container>
     </footer>
