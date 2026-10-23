@@ -56,9 +56,8 @@ describe('BioPage', () => {
     expect(document.body.textContent ?? '').not.toMatch(phonePattern)
   })
 
-  it('flags the undocumented timeline gap under the experience list', () => {
+  it('shows no TODO(agustin) placeholder anywhere on the page', () => {
     render(<BioPage />)
-    const note = screen.getByText(/TODO\(agustin\)/)
-    expect(note.closest('#experience')).toBeInTheDocument()
+    expect(document.body.textContent ?? '').not.toContain('TODO(agustin)')
   })
 })

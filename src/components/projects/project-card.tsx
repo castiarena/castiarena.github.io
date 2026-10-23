@@ -1,8 +1,9 @@
 import type { Route } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 
 import { HoverLift } from '@/components/motion'
-import { CoverGradient, TagList } from '@/components/shared'
+import { TagList } from '@/components/shared'
 import type { Project } from '@/content'
 import { cn } from '@/lib/utils'
 
@@ -12,10 +13,7 @@ export interface ProjectCardProps {
   project: Project
   /** 1-based position, rendered as the mono index over the cover (e.g. "01"). */
   index?: number
-  /**
-   * Accepted for parity with `ExperimentCard`'s contract; unused here because the cover is a
-   * live `CoverGradient`, not a `next/image`, so there is no LCP image to prioritise.
-   */
+  /** Accepted for parity with `ExperimentCard`'s contract; unused (Home cards sit below the fold). */
   priority?: boolean
 }
 
@@ -34,7 +32,15 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
         className="flex h-full flex-col overflow-hidden rounded-lg border border-border bg-card focus-visible:outline-none"
       >
         <div className="relative aspect-[16/10] shrink-0 overflow-hidden rounded-t-lg">
-          <CoverGradient seed={project.slug} />
+          {/* Same `cover.src` as the projects index and detail hero. Decorative here: the card's
+              link is already named by the title and summary below. */}
+          <Image
+            src={project.cover.src}
+            alt=""
+            fill
+            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+            className="object-cover"
+          />
           {indexLabel ? (
             <span
               aria-hidden="true"

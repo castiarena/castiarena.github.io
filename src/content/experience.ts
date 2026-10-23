@@ -1,9 +1,9 @@
 import type { Experience } from './types'
 
-// Source: docs/plan/assets/cv-content.md. `intro` and `highlights` are verbatim (enforced by
-// tests/unit/content/cv-verbatim.test.ts). Newest first. `stack` is only set where the CV text names it.
-// The CV has no intro for Mercado Libre, so its `intro` is an empty string (renderers should skip it).
-// The 10/2018 – 01/2020 gap is not on the CV and is intentionally not represented.
+// Source: docs/plan/assets/cv-content.md (the CV plus the owner's LinkedIn export). `intro` and
+// `highlights` are verbatim (enforced by tests/unit/content/cv-verbatim.test.ts). Newest first.
+// `stack` is only set where the source names it. Roles with no text have an empty `intro` and
+// `highlights` (renderers skip both).
 export const experiences: Experience[] = [
   {
     id: 'riverside',
@@ -20,8 +20,11 @@ export const experiences: Experience[] = [
       'Reduced frontend complexity through large-scale technical refactoring that improved maintainability',
       'Introduced AI-assisted engineering workflows and code review automation to streamline development practices',
       "Delivered features across engineering teams for one of the company's most business-critical products",
+      'Developed Livestream integrations, enabling platform login and RTMP streaming with refresh token circuits',
+      'Facilitated stable peer-to-peer communication for video calls, enhancing user experience',
+      'Provided technical support to high-profile clients including Microsoft, TED, X, and Spotify',
     ],
-    stack: ['GraphQL', 'Microservices'],
+    stack: ['React', 'GraphQL', 'Microservices', 'Integration Testing'],
   },
   {
     id: 'realworld-one',
@@ -39,6 +42,7 @@ export const experiences: Experience[] = [
       'Strengthened team growth through mentoring and resource planning',
       'Shipped product improvements in close partnership with stakeholders',
     ],
+    stack: ['React', 'Integration Testing'],
   },
   {
     id: 'westwing',
@@ -52,8 +56,24 @@ export const experiences: Experience[] = [
       'Advanced the platform migration toward a decentralized micro frontend architecture',
       'Built and maintained a shared UI kit that improved consistency across frontend teams',
       'Migrated core checkout and payments functionality to support the broader modernization effort',
+      'Developed an internal tool utilizing the company UI library, enabling contributions from all team members',
+      'Implemented automated processes for seamless version creation and publishing, enhancing team efficiency',
     ],
-    stack: ['Micro frontends'],
+    stack: ['React', 'Micro frontends', 'Integration Testing'],
+  },
+  {
+    id: 'axa',
+    company: 'AXA',
+    title: 'Fullstack Engineer',
+    start: '2018-12',
+    end: '2019-12',
+    intro: '',
+    highlights: [
+      'Led the migration of a React project from JavaScript to a typed solution, enhancing code reliability.',
+      'Advocated for end-to-end testing based on BDD using Gherkin language for the E-Rescue project.',
+      'Contributed to the significant migration of the E-Lawyers project, ensuring secure database connections with Redux Saga.',
+    ],
+    stack: ['React', 'Test-Driven Development', 'Redux Saga'],
   },
   {
     id: 'mercado-libre',
@@ -62,13 +82,71 @@ export const experiences: Experience[] = [
     title: 'Senior Frontend Engineer',
     start: '2015-11',
     end: '2018-10',
-    intro: '',
+    intro:
+      "Worked on one of Latin America's largest e-commerce platforms, delivering product improvements for millions of users.",
     highlights: [
       'Built and maintained purchase flow functionality across the platform',
       'Rolled out purchase flow initiatives across multiple Latin American countries',
       'Improved automation processes and engineering quality',
       'Strengthened testing practices within the engineering team',
       'Delivered scalable solutions in collaboration with multiple product teams',
+      'Built and nurtured a team focused on Frontend implementations, fostering collaboration and innovation',
+      'Developed a modular component for Google Maps integration, widely adopted across the company',
+      'Implemented an E2E test suite supporting over 1000 cases for various payment methods, ensuring reliability in key markets',
+      'Transitioned inline JavaScript to a Node.js process, enhancing compatibility with modern frontend technologies',
+    ],
+    stack: ['React', 'TypeScript', 'Node.js', 'Test-Driven Development'],
+  },
+  {
+    id: 'basso-brovelli',
+    company: 'Basso Brovelli',
+    title: 'Senior Frontend Developer',
+    start: '2014-08',
+    end: '2015-12',
+    intro: '',
+    highlights: [
+      'Developed innovative web solutions for high-profile marketing campaigns for brands like Branca and Villa del Sur.',
+      'Collaborated with cross-functional teams to enhance frontend applications for various clients, including N.A.S.A (Argentina) and DutyFree.',
+      'Utilized modern frontend technologies to ensure optimal user experience and engagement across all projects.',
+    ],
+    stack: ['React', 'Test-Driven Development'],
+  },
+  {
+    id: 'cobranzas',
+    company: 'Cobranzas',
+    title: 'Junior Frontend Developer',
+    start: '2014-05',
+    end: '2014-08',
+    intro: '',
+    highlights: [
+      'Improved and maintained a legacy user interface from 1999, transitioning to modern JavaScript frameworks.',
+      "Integrated Bootstrap to enhance the UI's responsiveness and user experience.",
+      'Contributed to asynchronous operations by adding JSON support to existing XML API responses on ASP.NET servers.',
+    ],
+    stack: ['jQuery', 'SQL'],
+  },
+  {
+    id: 'ilcacto',
+    company: 'Ilcacto',
+    title: 'Freelance Developer',
+    start: '2012-08',
+    end: '2012-12',
+    intro:
+      'Support building and maintaining websites, also contributed on-site presentation for interactive projects at Tecnolopis in Buenos Aires.',
+    highlights: [],
+  },
+  {
+    id: 'octavo-circulo',
+    company: 'Octavo Círculo',
+    title: 'Freelance Developer',
+    start: '2012-03',
+    end: '2012-11',
+    intro: '',
+    highlights: [
+      'Provided frontend support for e-commerce pages tailored to natural pharmacies in Spain.',
+      'Maintained and integrated new features to enhance user experience and functionality.',
+      'Contributed to the updating of promotional websites, ensuring they remained current and engaging.',
+      'Collaborated with Octavo Círculo, a dynamic advertising services startup, to drive online presence.',
     ],
   },
 ]

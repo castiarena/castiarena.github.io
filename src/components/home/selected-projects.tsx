@@ -42,7 +42,8 @@ export function SelectedProjects() {
         </Stagger>
 
         <p className="font-mono text-xs text-muted-foreground">
-          Covers are generated placeholders until real case-study assets land.
+          exporter has a real cover; the others are generated placeholders until real case-study
+          assets land.
         </p>
       </div>
     </section>

@@ -9,10 +9,8 @@ const NUMERIC_OUTCOME = /^(\d+(?:\.\d+)?)\s*(%|x|\+)\s+(.+)$/i
 
 /**
  * `Project.outcomes` is unstructured CV prose (`src/content/schema.ts`), not `{ value, unit,
- * label }`. Outcomes that open with a number render as a `StatTile`; everything else (including
- * every `TODO(agustin)` placeholder in the current content) falls back to a plain card —
- * `03-page-specs.md` → Project detail §5: "an outcome with no number renders as a dashed-border
- * card with muted text."
+ * label }`. Outcomes that open with a number render as a `StatTile`; everything else falls back
+ * to a text card in `project-outcomes.tsx` (dashed and muted only for `TODO(agustin)` placeholders).
  */
 export function parseOutcome(outcome: string): ParsedOutcome | null {
   const match = NUMERIC_OUTCOME.exec(outcome.trim())

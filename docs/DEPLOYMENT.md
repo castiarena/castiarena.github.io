@@ -31,11 +31,18 @@ Vercel and GitHub Pages serve the same `next build` output (`output: 'export'`, 
 
 Build environment variables:
 
-| Variable                    | CI (`ci.yml`)                  | Production (`deploy-pages.yml`)                | Vercel preview                  |
-| --------------------------- | ------------------------------ | ---------------------------------------------- | ------------------------------- |
-| `NEXT_PUBLIC_SITE_URL`      | `https://castiarena.github.io` | `https://castiarena.github.io`                 | empty (falls back to github.io) |
-| `NEXT_PUBLIC_DEPLOY_ENV`    | —                              | `production`                                   | —                               |
-| `NEXT_PUBLIC_FORM_ENDPOINT` | —                              | repo variable `vars.NEXT_PUBLIC_FORM_ENDPOINT` | Vercel env var (same value)     |
+| Variable                         | CI (`ci.yml`)                             | Production (`deploy-pages.yml`)                     | Vercel preview                  |
+| -------------------------------- | ----------------------------------------- | --------------------------------------------------- | ------------------------------- |
+| `NEXT_PUBLIC_SITE_URL`           | `https://castiarena.github.io`            | `https://castiarena.github.io`                      | empty (falls back to github.io) |
+| `NEXT_PUBLIC_DEPLOY_ENV`         | —                                         | `production`                                        | —                               |
+| `NEXT_PUBLIC_EMAIL_API_URL`      | `https://email-api.invalid` (placeholder) | repo variable `vars.NEXT_PUBLIC_EMAIL_API_URL`      | Vercel env var (same value)     |
+| `NEXT_PUBLIC_EMAIL_API_KEY`      | `pk_test_e2e` (placeholder)               | repo variable `vars.NEXT_PUBLIC_EMAIL_API_KEY`      | Vercel env var (same value)     |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Turnstile test key (placeholder)          | repo variable `vars.NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Vercel env var (same value)     |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID`  | —                                         | repo variable `vars.NEXT_PUBLIC_GA_MEASUREMENT_ID`  | —                               |
+
+The three contact-form values are public (they ship in browser code), so they live in repository **Variables**, not Secrets. The same goes for the GA4 measurement ID. If any is missing, the form falls back to `mailto:`. CI builds with placeholders only so the e2e tests exercise the API path; they stub Turnstile and intercept `**/api/send`. `.env.example` documents local dev. A Vercel preview only works against the real API if its origin is in the public key's `origins` in the email API's `PUBLIC_KEYS` and its hostname is in the Turnstile widget's hostnames.
+
+Analytics need **both** `NEXT_PUBLIC_GA_MEASUREMENT_ID` and `NEXT_PUBLIC_DEPLOY_ENV=production`, so only the Pages deploy ever reports to GA4 — CI, Vercel previews and local dev cannot, even by accident. The consent banner still renders everywhere so it stays testable.
 
 ### Required status checks
 
@@ -65,7 +72,7 @@ Agents can't change repository, Pages or Vercel settings. Do these once.
 - [ ] [Settings → Branches](https://github.com/castiarena/castiarena.github.io/settings/branches): protect `main` and `next`. Require a PR, require status checks `verify` and `e2e` (both branches) plus `Vercel` (on `next`), and require 1 review on `main`. The checks only show up in the picker after `ci.yml` has run at least once.
 - [ ] [Settings → Environments → `github-pages`](https://github.com/castiarena/castiarena.github.io/settings/environments): deployment branches and tags = **Selected branches** → `main` only. (The environment already exists from the legacy Pages setup.)
 - [ ] [Settings → Actions → General](https://github.com/castiarena/castiarena.github.io/settings/actions): _Workflow permissions_ = **Read repository contents and packages permissions**, and untick **Allow GitHub Actions to create and approve pull requests**. On 2026-09-17 these were still `write` and allowed. The workflows declare their own `permissions:`, so they keep working.
-- [ ] (Optional) [Settings → Secrets and variables → Actions → Variables](https://github.com/castiarena/castiarena.github.io/settings/variables/actions): `NEXT_PUBLIC_FORM_ENDPOINT` = your Formspree/Web3Forms endpoint.
+- [ ] [Settings → Secrets and variables → Actions → Variables](https://github.com/castiarena/castiarena.github.io/settings/variables/actions): `NEXT_PUBLIC_EMAIL_API_URL` (email API base URL), `NEXT_PUBLIC_EMAIL_API_KEY` (the `pk_live_…` public key) and `NEXT_PUBLIC_TURNSTILE_SITE_KEY` (Turnstile **site** key). Without them the contact form falls back to `mailto:`. Also `NEXT_PUBLIC_GA_MEASUREMENT_ID` (the `G-XXXXXXXXXX` from the GA4 web data stream); without it analytics stay off. See the owner checklist in `docs/analytics-plan.md` for the GA4 property settings that go with it.
 - [ ] **Leave [Settings → Pages](https://github.com/castiarena/castiarena.github.io/settings/pages) alone for now.** The source switches during cutover (§4).
 
 **Vercel**
@@ -73,7 +80,7 @@ Agents can't change repository, Pages or Vercel settings. Do these once.
 - [ ] [vercel.com/new](https://vercel.com/new) → import `castiarena/castiarena.github.io` (install the Vercel GitHub App on this repository only).
 - [ ] Framework: Next.js · Root directory: `./` · Node.js: 24.x. Install and build commands come from `vercel.json`.
 - [ ] Project Settings → Git → _Production Branch_ = `main`. `vercel.json` disables deployments for `main` and `legacy-v1`, so Vercel only builds PR previews and `next`.
-- [ ] Project Settings → Environment Variables (Preview): `NEXT_PUBLIC_SITE_URL` empty, `NEXT_PUBLIC_FORM_ENDPOINT` = same as GitHub.
+- [ ] Project Settings → Environment Variables (Preview): `NEXT_PUBLIC_SITE_URL` empty, the three contact-form variables = same as GitHub (see the note under _Build environment variables_).
 - [ ] Project Settings → Deployment Protection: keep _Vercel Authentication_ on for private previews, or turn it off to share previews publicly.
 - [ ] Open a test PR into `next` and check that the Vercel bot comments a preview URL and a `Vercel` status check appears.
 
@@ -116,8 +123,8 @@ Notes:
 - **`.nojekyll`** is in `public/` (copied to `out/`) and also touched in `deploy-pages.yml`, so `_next/` is never filtered out. Both artifact uploads set `include-hidden-files: true`, because `upload-artifact` and `upload-pages-artifact` skip dotfiles by default.
 - **`404.html`** comes from `not-found.tsx`, and Pages serves it for unknown paths. `next build` also writes `out/404/index.html` and `out/_not-found/`. They are harmless and `verify-export` ignores them.
 - **No `actions/configure-pages`** with `static_site_generator: next`: it injects a `basePath` (wrong for a user site) and doesn't handle `next.config.ts`.
-- **No Server Actions.** The contact form posts to `NEXT_PUBLIC_FORM_ENDPOINT` and falls back to `mailto:`.
-- **`@vercel/analytics`** only works on Vercel domains. Use a script-based tool (Plausible, Umami, GoatCounter) on github.io. Out of scope for v2.0.
+- **No Server Actions.** The contact form calls the email API (`castiarena/email-api`, `POST /api/send`) from the browser with a public key and a Cloudflare Turnstile token, and falls back to `mailto:` when unconfigured. The API parses strictly: send exactly `template`, `reply_to`, `data` and `captcha_token`, and only the `Authorization`, `Content-Type` and `Idempotency-Key` request headers, or it (or its CORS preflight) rejects the request.
+- **Analytics** are GA4 behind an opt-in consent banner, loaded client-side by `@next/third-parties` — `@vercel/analytics` is not an option, it only reports from Vercel domains. Nothing is requested from Google before a visitor accepts. The decisions, event catalog and owner setup steps live in `docs/analytics-plan.md`; the code is `src/lib/analytics/` and `src/components/analytics/`.
 - **Vercel previews** send `X-Robots-Tag: noindex`, so they don't compete with production in search.
 - **`deploy-pages` before cutover:** the workflow only runs on pushes to `main`, and _Run workflow_ only appears once the file is on `main`. Before the Pages source is switched to GitHub Actions, a deploy would fail at the `deploy` step. That is harmless, and the legacy site keeps serving.
 - **Action versions** are pinned to majors (`checkout@v7`, `setup-node@v7`, `pnpm/action-setup@v6`, `upload-artifact@v7`, `download-artifact@v8`, `upload-pages-artifact@v5`, `deploy-pages@v5`). Dependabot proposes bumps weekly. `pnpm/action-setup` reads the pnpm version from `packageManager` in `package.json`, so don't also set `version:`.
@@ -126,7 +133,7 @@ Notes:
 
 Exits 1 with a readable report if any of these fail:
 
-- `out/` contains non-empty `index.html`, `404.html`, `bio/index.html`, `experiments/index.html`, `projects/index.html` and `cv/agustin-castiarena-resume.pdf`
+- `out/` contains non-empty `index.html`, `404.html`, `bio/index.html`, `experiments/index.html`, `projects/index.html`, `privacy/index.html` and `cv/agustin-castiarena-resume.pdf`
 - `out/_next/static/` exists and is not empty
 - The number of `out/projects/<slug>/index.html` folders equals the number of `slug:` entries in `src/content/projects.ts`, and each slug has its folder
 - No `.html` file contains `href="/castiarena.github.io/` or `src="/castiarena.github.io/`, or any `/_next/` asset URL under a path prefix (basePath leak)

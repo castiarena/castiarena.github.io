@@ -94,6 +94,37 @@ describe('ProjectDetail', () => {
       'https://github.com/example/repo',
     )
     expect(screen.queryByText(/TODO\(agustin\): live link/)).not.toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: /Website/ })).not.toBeInTheDocument()
+  })
+
+  it('uses liveLabel for the live button and orders live, website, source', () => {
+    const project = makeProject({
+      links: {
+        live: 'https://example.com/store',
+        liveLabel: 'Add to Chrome',
+        website: 'https://example.com',
+        repo: 'https://github.com/example/repo',
+      },
+    })
+    render(<ProjectDetail project={project} prev={null} next={null} />)
+
+    expect(screen.queryByRole('link', { name: /View live/ })).not.toBeInTheDocument()
+    const buttons = [/Add to Chrome/, /Website/, /View source/].map((name) =>
+      screen.getByRole('link', { name }),
+    )
+    expect(buttons.map((link) => link.getAttribute('href'))).toEqual([
+      'https://example.com/store',
+      'https://example.com',
+      'https://github.com/example/repo',
+    ])
+    for (const link of buttons) {
+      expect(link).toHaveAttribute('target', '_blank')
+      expect(link).toHaveTextContent('(opens in a new tab)')
+    }
+    // DOM order matches visual order.
+    const [live, website, repo] = buttons
+    expect(live!.compareDocumentPosition(website!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(website!.compareDocumentPosition(repo!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   })
 
   it('shows the draft badge when NEXT_PUBLIC_DEPLOY_ENV is not "production"', () => {

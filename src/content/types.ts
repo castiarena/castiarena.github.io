@@ -72,7 +72,15 @@ export interface Project {
   stack: string[]
   cover: { src: string; alt: string }
   gallery?: { src: string; alt: string }[]
-  links: { live?: string; repo?: string; caseStudy?: string }
+  links: {
+    live?: string
+    /** Label for the `live` button; defaults to "View live". */
+    liveLabel?: string
+    /** Project's own website, shown as a "Website" button next to `live`. */
+    website?: string
+    repo?: string
+    caseStudy?: string
+  }
   featured: boolean
   order: number
 }

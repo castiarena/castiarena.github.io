@@ -20,9 +20,10 @@ export default function ProjectsPage() {
       />
       <ProjectsIndex projects={projects} className="pb-16" />
       <p className="border-t border-border pt-8 pb-16 font-mono text-xs text-muted-foreground">
-        Covers are generated SVG placeholders derived from each project&apos;s slug. Roles and
-        periods come straight from the CV; problem write-ups, approach detail and outcomes ship
-        marked TODO(agustin) until real case-study copy is ready.
+        exporter is a complete case study. For the other three, covers are generated SVG
+        placeholders derived from each project&apos;s slug, roles and periods come straight from the
+        CV, and problem write-ups, approach detail and outcomes ship marked TODO(agustin) until real
+        case-study copy is ready.
       </p>
     </Container>
   )

@@ -24,7 +24,7 @@ import { useHeaderScrolled } from './use-header-scrolled'
  */
 const NOT_FOUND_PATHNAME = '/404'
 
-const NAV_ITEMS = [{ href: '/', label: 'Home' }, ...siteConfig.nav]
+const NAV_ITEMS = [...siteConfig.nav]
 
 export function SiteHeader() {
   const pathname = usePathname()
