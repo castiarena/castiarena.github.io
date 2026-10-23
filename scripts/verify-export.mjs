@@ -28,6 +28,7 @@ const REQUIRED_FILES = [
   'bio/index.html',
   'experiments/index.html',
   'projects/index.html',
+  'privacy/index.html',
   'cv/agustin-castiarena-resume.pdf',
 ]
 // Required from Wave 3 (agent 3.1) onward; warnings until VERIFY_STRICT=1.
