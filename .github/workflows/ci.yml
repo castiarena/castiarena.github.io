@@ -40,6 +40,10 @@ jobs:
           NEXT_PUBLIC_EMAIL_API_URL: https://email-api.invalid
           NEXT_PUBLIC_EMAIL_API_KEY: pk_test_e2e
           NEXT_PUBLIC_TURNSTILE_SITE_KEY: 1x00000000000000000000AA
+          # Fake GA id + production flag so `analytics.spec.ts` can prove consent gates gtag.js.
+          # The spec routes every Google request to a local stub, so nothing is ever sent.
+          NEXT_PUBLIC_DEPLOY_ENV: production
+          NEXT_PUBLIC_GA_MEASUREMENT_ID: G-E2ETEST000
       - run: node scripts/verify-export.mjs
         env:
           VERIFY_STRICT: '0' # agent 3.1 flips this to '1' once sitemap.xml/robots.txt exist

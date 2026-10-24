@@ -1,8 +1,10 @@
 # Analytics plan — GA4 with opt-in consent
 
-Status: **PR 1 built** (branch `feat/analytics-consent`), PR 2 and PR 3 not started. Decisions
-below were settled in a grilling session; treat them as fixed unless the owner reopens one.
-Implementation is split into three independently shippable PRs.
+Status: **all three PRs built.** PR 1 is merged (#26 → #27 → `next`); PR 2 is open as #29; PR 3
+stacks on it. What remains is the owner's manual setup below — until
+`NEXT_PUBLIC_GA_MEASUREMENT_ID` is set as a repo variable, the banner renders and nothing is ever
+measured. Decisions below were settled in a grilling session; treat them as fixed unless the owner
+reopens one.
 
 ## Goals
 
@@ -176,7 +178,7 @@ Three deviations from the catalog table, all deliberate:
 
 The honeypot's fake-success path reports nothing: a bot must not look like a lead.
 
-### PR 3 — E2E + docs
+### PR 3 — E2E + docs — **done**
 
 - Playwright spec (`tests/e2e/analytics.spec.ts`) against a build with a fake measurement ID and
   `NEXT_PUBLIC_DEPLOY_ENV=production`:
@@ -186,8 +188,19 @@ The honeypot's fake-success path reports nothing: a bot must not look like a lea
   - Cookie preferences → Decline → `_ga*` cookies gone, no further GA requests.
   - Block/route GA requests in the test so nothing reaches Google.
 - Axe check with the banner visible.
-- Replace the "Out of scope for v2.0" analytics note at `docs/DEPLOYMENT.md:124` with a short
-  section pointing at this plan.
+- ~~Replace the "Out of scope for v2.0" analytics note at `docs/DEPLOYMENT.md:124`~~ — done in
+  PR 1, which had to touch that section anyway for the env table.
+
+To assert that Accept loads `gtag.js`, analytics have to be _configured_ in the build the e2e
+tests run against — otherwise the test proves only that an unconfigured build stays quiet. So CI
+and `playwright.config.ts` now build with `NEXT_PUBLIC_DEPLOY_ENV=production` and a fake
+`NEXT_PUBLIC_GA_MEASUREMENT_ID=G-E2ETEST000`, and the spec routes every Google request to a local
+stub. Nothing is ever sent. Side effect worth knowing: the same variable drives
+`project-hero`'s draft badge, so the e2e build no longer shows it — closer to the real deploy.
+
+Because `gtag.js` is stubbed, it never writes its own cookies, so the revocation test seeds `_ga`
+and `_ga_*` itself before revoking. What's under test there is our deletion code, which is the
+part we wrote.
 
 ## Manual setup checklist (owner)
 

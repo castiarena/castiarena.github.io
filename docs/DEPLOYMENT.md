@@ -34,15 +34,17 @@ Build environment variables:
 | Variable                         | CI (`ci.yml`)                             | Production (`deploy-pages.yml`)                     | Vercel preview                  |
 | -------------------------------- | ----------------------------------------- | --------------------------------------------------- | ------------------------------- |
 | `NEXT_PUBLIC_SITE_URL`           | `https://castiarena.github.io`            | `https://castiarena.github.io`                      | empty (falls back to github.io) |
-| `NEXT_PUBLIC_DEPLOY_ENV`         | —                                         | `production`                                        | —                               |
+| `NEXT_PUBLIC_DEPLOY_ENV`         | `production` (for the e2e build)          | `production`                                        | —                               |
 | `NEXT_PUBLIC_EMAIL_API_URL`      | `https://email-api.invalid` (placeholder) | repo variable `vars.NEXT_PUBLIC_EMAIL_API_URL`      | Vercel env var (same value)     |
 | `NEXT_PUBLIC_EMAIL_API_KEY`      | `pk_test_e2e` (placeholder)               | repo variable `vars.NEXT_PUBLIC_EMAIL_API_KEY`      | Vercel env var (same value)     |
 | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Turnstile test key (placeholder)          | repo variable `vars.NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Vercel env var (same value)     |
-| `NEXT_PUBLIC_GA_MEASUREMENT_ID`  | —                                         | repo variable `vars.NEXT_PUBLIC_GA_MEASUREMENT_ID`  | —                               |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID`  | `G-E2ETEST000` (fake)                     | repo variable `vars.NEXT_PUBLIC_GA_MEASUREMENT_ID`  | —                               |
 
 The three contact-form values are public (they ship in browser code), so they live in repository **Variables**, not Secrets. The same goes for the GA4 measurement ID. If any is missing, the form falls back to `mailto:`. CI builds with placeholders only so the e2e tests exercise the API path; they stub Turnstile and intercept `**/api/send`. `.env.example` documents local dev. A Vercel preview only works against the real API if its origin is in the public key's `origins` in the email API's `PUBLIC_KEYS` and its hostname is in the Turnstile widget's hostnames.
 
-Analytics need **both** `NEXT_PUBLIC_GA_MEASUREMENT_ID` and `NEXT_PUBLIC_DEPLOY_ENV=production`, so only the Pages deploy ever reports to GA4 — CI, Vercel previews and local dev cannot, even by accident. The consent banner still renders everywhere so it stays testable.
+Analytics need **both** `NEXT_PUBLIC_GA_MEASUREMENT_ID` and `NEXT_PUBLIC_DEPLOY_ENV=production`, so only the Pages deploy ever reports to a real GA4 property — Vercel previews and local dev cannot, even by accident. The consent banner still renders everywhere so it stays testable.
+
+CI is the one exception: it builds with both set, to a **fake** measurement ID. `tests/e2e/analytics.spec.ts` needs analytics configured in order to prove that what gates `gtag.js` is consent rather than configuration, and it routes every request to `googletagmanager.com` / `google-analytics.com` to a local stub, so nothing is ever sent. The same flag silences `project-hero`'s draft badge, which makes the e2e build that much closer to the real deploy.
 
 ### Required status checks
 
