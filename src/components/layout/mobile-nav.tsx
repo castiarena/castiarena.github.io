@@ -106,7 +106,10 @@ export function MobileNav({ open, onOpenChange, items, pathname }: MobileNavProp
         </nav>
 
         <div className="p-6">
-          <ContactDialog trigger={<Button className="w-full">Contact</Button>} />
+          <ContactDialog
+            source="mobile_nav"
+            trigger={<Button className="w-full">Contact</Button>}
+          />
         </div>
 
         <div className="mt-auto flex flex-col gap-3 border-t border-border p-6">
@@ -115,7 +118,12 @@ export function MobileNav({ open, onOpenChange, items, pathname }: MobileNavProp
           </p>
           <div className="flex flex-col gap-3">
             {elsewhereLinks.map((social) => (
-              <ExternalLink key={social.label} href={social.href} className="text-brand">
+              <ExternalLink
+                key={social.label}
+                href={social.href}
+                className="text-brand"
+                contentType="social"
+              >
                 {social.label}
               </ExternalLink>
             ))}

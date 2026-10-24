@@ -23,6 +23,7 @@ export function ContactBand() {
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
           <div className="w-full sm:w-auto">
             <ContactDialog
+              source="contact_band"
               trigger={
                 <Button size="lg" className="w-full sm:w-auto">
                   Get in touch

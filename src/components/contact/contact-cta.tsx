@@ -4,6 +4,7 @@ import { ClipboardIcon } from 'lucide-react'
 import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
+import { track } from '@/lib/analytics'
 import { profile } from '@/content'
 import { cn } from '@/lib/utils'
 
@@ -18,6 +19,7 @@ export function ContactCTA({ className }: ContactCTAProps) {
   async function handleCopyEmail() {
     const copied = await copyToClipboard(profile.email)
     if (copied) {
+      track('contact_copy_email', { source: 'cta' })
       toast.success('Email copied', { description: profile.email })
     } else {
       toast.error('Could not copy automatically', { description: profile.email })
@@ -26,7 +28,7 @@ export function ContactCTA({ className }: ContactCTAProps) {
 
   return (
     <div className={cn('flex items-center gap-3', className)}>
-      <ContactDialog trigger={<Button>Get in touch</Button>} />
+      <ContactDialog source="cta" trigger={<Button>Get in touch</Button>} />
       <Button
         type="button"
         variant="outline"

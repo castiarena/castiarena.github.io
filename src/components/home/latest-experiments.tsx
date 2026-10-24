@@ -35,7 +35,13 @@ function ExperimentRow({ experiment }: { experiment: Experiment }) {
 
   if (isExternal) {
     return (
-      <a href={experiment.href} target="_blank" rel="noopener noreferrer" className={className}>
+      <a
+        href={experiment.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-analytics-content-type="experiment"
+        className={className}
+      >
         {content}
       </a>
     )

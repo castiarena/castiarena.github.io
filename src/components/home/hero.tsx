@@ -50,6 +50,7 @@ export function Hero() {
                 <Link href={'/bio/' as Route}>Read bio</Link>
               </Button>
               <ContactDialog
+                source="hero"
                 trigger={
                   <Button size="lg" variant="ghost" className="hidden md:inline-flex">
                     Get in touch

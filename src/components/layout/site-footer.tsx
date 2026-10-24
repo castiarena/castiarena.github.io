@@ -38,6 +38,7 @@ export function SiteFooter() {
               href={social.href}
               className="text-brand"
               showIcon={false}
+              contentType="social"
             >
               {social.label}
             </ExternalLink>
