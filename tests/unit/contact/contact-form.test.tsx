@@ -9,6 +9,12 @@ vi.mock('next-themes', () => ({
   useTheme: () => ({ resolvedTheme: 'dark' }),
 }))
 
+const track = vi.fn()
+vi.mock('@/lib/analytics', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/lib/analytics')>()),
+  track: (...args: unknown[]) => track(...args),
+}))
+
 type RenderOptions = {
   callback: (token: string) => void
   'expired-callback': () => void
@@ -319,5 +325,91 @@ describe('ContactForm without the email API configured', () => {
     await waitFor(() => expect(assign).toHaveBeenCalledTimes(1))
     expect(assign.mock.calls[0]![0]).toMatch(/^mailto:/)
     expect(fetchMock).not.toHaveBeenCalled()
+  })
+})
+
+describe('ContactForm analytics', () => {
+  it('reports generate_lead once the API accepts the message', async () => {
+    fetchMock.mockResolvedValue(jsonResponse(200, { id: 'email_1' }))
+    renderForm()
+    await issueToken('tok-1')
+    fillForm()
+    waitPastMinimum()
+
+    fireEvent.click(submitButton())
+
+    expect(await screen.findByText(/I'll be in touch/, { selector: 'p' })).toBeInTheDocument()
+    expect(track).toHaveBeenCalledWith('generate_lead', { method: 'form' })
+  })
+
+  it.each([
+    ['captcha', 403, { error: { code: 'captcha_failed' } }, /complete it again/],
+    ['rate_limited', 429, { error: { code: 'rate_limited' } }, /Too many messages right now/],
+    ['failed', 403, { error: { code: 'not_allowed' } }, /Something went wrong/],
+  ] as const)('reports contact_error with reason %s', async (reason, status, body, message) => {
+    fetchMock.mockResolvedValue(jsonResponse(status, body))
+    renderForm()
+    await issueToken('tok-1')
+    fillForm()
+    waitPastMinimum()
+
+    fireEvent.click(submitButton())
+
+    expect(await screen.findByText(message)).toBeInTheDocument()
+    expect(track).toHaveBeenCalledWith('contact_error', { reason })
+    expect(track).not.toHaveBeenCalledWith('generate_lead', expect.anything())
+  })
+
+  it('reports contact_error with reason validation when the schema rejects the submit', async () => {
+    renderForm()
+    await issueToken('tok-1')
+    fillForm({ email: 'not-an-email' })
+    waitPastMinimum()
+
+    fireEvent.click(submitButton())
+
+    await waitFor(() => {
+      expect(track).toHaveBeenCalledWith('contact_error', { reason: 'validation' })
+    })
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
+
+  it('reports contact_mailto when the form falls back to the email app', async () => {
+    vi.stubEnv('NEXT_PUBLIC_EMAIL_API_URL', '')
+    vi.stubGlobal('location', { ...window.location, assign: vi.fn() })
+
+    renderForm()
+    fillForm()
+    waitPastMinimum()
+    fireEvent.click(screen.getByRole('button', { name: 'Open email app' }))
+
+    await waitFor(() => {
+      expect(track).toHaveBeenCalledWith('contact_mailto', { source: 'form' })
+    })
+  })
+
+  it('reports contact_mailto when the visitor takes the "Email me instead" escape hatch', async () => {
+    fetchMock.mockResolvedValue(jsonResponse(403, { error: { code: 'not_allowed' } }))
+    renderForm()
+    await issueToken('tok-1')
+    fillForm()
+    waitPastMinimum()
+    fireEvent.click(submitButton())
+
+    fireEvent.click(await screen.findByRole('link', { name: /Email me instead/ }))
+
+    expect(track).toHaveBeenCalledWith('contact_mailto', { source: 'form' })
+  })
+
+  it('reports nothing at all when the honeypot catches a bot', async () => {
+    renderForm()
+    await issueToken('tok-1')
+    fillForm({ company: 'Spam Inc' })
+    waitPastMinimum()
+
+    fireEvent.click(submitButton())
+
+    expect(await screen.findByText(/I'll be in touch/, { selector: 'p' })).toBeInTheDocument()
+    expect(track).not.toHaveBeenCalled()
   })
 })

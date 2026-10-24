@@ -59,6 +59,7 @@ export function SiteHeader() {
           {!isNotFound && <ThemeToggle />}
 
           <ContactDialog
+            source="header"
             trigger={
               <Button className={cn(!isNotFound && 'hidden md:inline-flex')}>Contact</Button>
             }

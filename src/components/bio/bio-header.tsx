@@ -50,6 +50,7 @@ export function BioHeader({ profile }: BioHeaderProps) {
               href={linkedin.href}
               target="_blank"
               rel="noopener noreferrer"
+              data-analytics-content-type="social"
               className={buttonVariants({
                 variant: 'outline',
                 size: 'lg',
@@ -65,6 +66,7 @@ export function BioHeader({ profile }: BioHeaderProps) {
               href={github.href}
               target="_blank"
               rel="noopener noreferrer"
+              data-analytics-content-type="social"
               className={buttonVariants({
                 variant: 'outline',
                 size: 'lg',

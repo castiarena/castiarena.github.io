@@ -4,6 +4,7 @@ import { Check, Copy } from 'lucide-react'
 import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
+import { track } from '@/lib/analytics'
 
 export interface CopyEmailButtonProps {
   email: string
@@ -16,6 +17,7 @@ export function CopyEmailButton({ email }: CopyEmailButtonProps) {
   async function handleCopy() {
     try {
       await navigator.clipboard.writeText(email)
+      track('contact_copy_email', { source: 'contact_band' })
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     } catch {

@@ -142,12 +142,39 @@ files, and `/privacy/` in `tests/e2e/smoke.spec.ts`'s route list.
 without one and `trailingSlash: true` adds it at render time. The unit tests assert
 `/^\/privacy\/?$/` for the same reason, as `tests/unit/layout/nav-item.test.tsx` already did.
 
-### PR 2 — Event catalog + instrumentation
+### PR 2 — Event catalog + instrumentation — **done**
 
 - `events.ts` + `track.ts` (dev logging, prod gtag, otherwise no-op; never throws).
 - Instrument every row of the catalog above.
 - Unit tests: `track()` gating matrix (enabled × consent × env); each instrumented component calls
   `track` with the expected name/params (mock the module).
+
+**Instrumentation is attribute-driven, not `onClick`-driven.** The plan assumed each link site
+would call `track` itself, which would have turned `project-card`, `experiment-card`,
+`latest-experiments`, `timeline-node`, `bio-header` and `project-hero` into Client Components —
+and `/bio/`'s course links live in `src/app/bio/page.tsx`, which has to stay a Server Component
+for its `metadata` export. Instead those anchors carry `data-analytics-content-type` (and project
+links `data-analytics-event="select_content"` + `data-analytics-content-id`), which costs nothing
+and changes no markup, and a single `<LinkTracker>` in the layout reads them on a captured
+`click` / `auxclick`. `describeLinkClick()` in `lib/analytics/outbound.ts` holds the logic and is
+pure, so it is tested without events. Nothing was migrated to `ExternalLink`: it would have added
+the arrow icon and `inline-flex` to card-shaped anchors. `ExternalLink` did gain an optional
+`contentType` prop for the places already using it (footer and mobile-nav socials).
+
+Three deviations from the catalog table, all deliberate:
+
+- `contact_error`'s reasons are `captcha | rate_limited | failed | validation`, not
+  `network | turnstile | validation`. The first three are `SubmitFailureReason` as
+  `form-endpoint.ts` actually produces it; `validation` is the schema rejecting a submit before
+  any request. The plan's names don't exist anywhere in the code.
+- `contact_mailto` and `contact_copy_email` each carry a `source`, which the table left as "—".
+  Both fire from more than one place (the form's fallback and its "Email me instead" link; the
+  CTA, the form and the contact band), and a bare count can't tell them apart.
+- `/bio/`'s course links are tracked too — they were not in the plan's list of raw
+  `target="_blank"` sites. They report as outbound `click` with no `content_type`, since
+  "training" isn't one of the four content types.
+
+The honeypot's fake-success path reports nothing: a bot must not look like a lead.
 
 ### PR 3 — E2E + docs
 
