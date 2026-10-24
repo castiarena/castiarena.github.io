@@ -1,6 +1,7 @@
 import type { ComponentPropsWithoutRef, ReactNode } from 'react'
 import { ArrowUpRight } from 'lucide-react'
 
+import type { OutboundContentType } from '@/lib/analytics'
 import { cn } from '@/lib/utils'
 
 export interface ExternalLinkProps extends Omit<
@@ -11,6 +12,8 @@ export interface ExternalLinkProps extends Omit<
   children: ReactNode
   className?: string
   showIcon?: boolean
+  /** Tags the outbound `click` event. Read by `<LinkTracker>`, not used for rendering. */
+  contentType?: OutboundContentType
 }
 
 /** Link that opens in a new tab with safe `rel`, an arrow icon and screen-reader context. */
@@ -19,6 +22,7 @@ export function ExternalLink({
   children,
   className,
   showIcon = true,
+  contentType,
   ...props
 }: ExternalLinkProps) {
   return (
@@ -27,6 +31,7 @@ export function ExternalLink({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
+      data-analytics-content-type={contentType}
       className={cn(
         'inline-flex items-center gap-1 underline-offset-4 hover:underline [&>svg]:shrink-0',
         className,

@@ -5,6 +5,7 @@ import { MoonIcon, SunIcon } from 'lucide-react'
 import { useTheme } from 'next-themes'
 
 import { Button } from '@/components/ui/button'
+import { track } from '@/lib/analytics'
 
 const THEME_CYCLE = ['light', 'dark', 'system'] as const
 type ThemeMode = (typeof THEME_CYCLE)[number]
@@ -53,7 +54,10 @@ export function ThemeToggle() {
       type="button"
       variant="ghost"
       size="icon"
-      onClick={() => setTheme(upcoming)}
+      onClick={() => {
+        track('theme_change', { theme: upcoming })
+        setTheme(upcoming)
+      }}
       aria-label={`Theme: ${mode}. Switch to ${upcoming}.`}
     >
       {isDark ? <MoonIcon aria-hidden="true" /> : <SunIcon aria-hidden="true" />}

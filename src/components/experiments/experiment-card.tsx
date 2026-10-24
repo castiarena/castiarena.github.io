@@ -34,6 +34,7 @@ export function ExperimentCard({ experiment, priority = false }: ExperimentCardP
           href={href}
           target="_blank"
           rel="noopener noreferrer"
+          data-analytics-content-type="experiment"
           className="flex flex-1 flex-col focus-visible:outline-none"
         >
           <div className="relative aspect-[16/10] shrink-0 overflow-hidden rounded-t-lg">
@@ -82,6 +83,7 @@ export function ExperimentCard({ experiment, priority = false }: ExperimentCardP
               href={sourceHref}
               target="_blank"
               rel="noopener noreferrer"
+              data-analytics-content-type="experiment"
               className="text-sm font-medium text-brand hover:underline"
             >
               Source

@@ -45,6 +45,7 @@ export function TimelineNode({ experience, last = false }: TimelineNodeProps) {
             href={experience.companyUrl}
             target="_blank"
             rel="noopener noreferrer"
+            data-analytics-content-type="employer"
             className="w-fit text-sm text-muted-foreground hover:text-foreground"
           >
             {experience.company}

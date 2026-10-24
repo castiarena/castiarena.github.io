@@ -11,6 +11,7 @@ import { DialogClose } from '@/components/ui/dialog'
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+import { track } from '@/lib/analytics'
 import { profile } from '@/content'
 import { cn } from '@/lib/utils'
 
@@ -67,6 +68,7 @@ export function ContactForm() {
     }
 
     if (!apiConfig) {
+      track('contact_mailto', { source: 'form' })
       window.location.assign(buildMailto(profile.email, values))
       toast.success('Opening your email app…')
       return
@@ -92,19 +94,23 @@ export function ContactForm() {
     if (result.ok) {
       idempotencyRef.current = null
       setStatus('success')
+      track('generate_lead', { method: 'form' })
       toast.success("Thanks — I'll be in touch.")
     } else if (result.reason === 'captcha') {
       setStatus('idle')
       setErrorReason('captcha')
+      track('contact_error', { reason: 'captcha' })
     } else {
       setStatus('error')
       setErrorReason(result.reason)
+      track('contact_error', { reason: result.reason })
     }
   }
 
   async function handleCopyEmail() {
     const copied = await copyToClipboard(profile.email)
     if (copied) {
+      track('contact_copy_email', { source: 'form' })
       toast.success('Email copied', { description: profile.email })
     } else {
       toast.error('Could not copy automatically', { description: profile.email })
@@ -130,7 +136,9 @@ export function ContactForm() {
     // submit handler inside the event callback keeps those reads provably outside render.
     <form
       onSubmit={(event) => {
-        void form.handleSubmit(onValid)(event)
+        void form.handleSubmit(onValid, () => {
+          track('contact_error', { reason: 'validation' })
+        })(event)
       }}
       noValidate
       className="flex flex-col gap-6"
@@ -216,6 +224,7 @@ export function ContactForm() {
           </p>
           <a
             href={buildMailto(profile.email, form.getValues())}
+            onClick={() => track('contact_mailto', { source: 'form' })}
             className="inline-flex w-fit items-center gap-1.5 font-semibold underline underline-offset-4 hover:text-foreground"
           >
             <MailIcon className="size-3.5" aria-hidden="true" />

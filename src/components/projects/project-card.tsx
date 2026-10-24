@@ -29,6 +29,8 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
     <HoverLift className="h-full">
       <Link
         href={`/projects/${project.slug}/` as Route}
+        data-analytics-event="select_content"
+        data-analytics-content-id={project.slug}
         className="flex h-full flex-col overflow-hidden rounded-lg border border-border bg-card focus-visible:outline-none"
       >
         <div className="relative aspect-[16/10] shrink-0 overflow-hidden rounded-t-lg">
