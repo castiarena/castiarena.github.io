@@ -51,6 +51,8 @@ function ProjectIndexRow({ project, index, reversed }: ProjectIndexRowProps) {
           <TagList tags={project.stack} />
           <Link
             href={`/projects/${project.slug}/` as Route}
+            data-analytics-event="select_content"
+            data-analytics-content-id={project.slug}
             className="group inline-flex w-fit items-center gap-1 text-sm font-medium text-brand"
           >
             Read case study

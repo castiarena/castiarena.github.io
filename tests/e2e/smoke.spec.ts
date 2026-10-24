@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 
-const routes = ['/', '/bio/', '/experiments/', '/projects/'] as const
+const routes = ['/', '/bio/', '/experiments/', '/projects/', '/privacy/'] as const
 
 for (const route of routes) {
   test(`smoke: ${route} responds 200 and has exactly one h1`, async ({ page }) => {

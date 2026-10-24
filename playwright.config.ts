@@ -33,6 +33,13 @@ export default defineConfig({
       NEXT_PUBLIC_EMAIL_API_URL: 'https://email-api.invalid',
       NEXT_PUBLIC_EMAIL_API_KEY: 'pk_test_e2e',
       NEXT_PUBLIC_TURNSTILE_SITE_KEY: '1x00000000000000000000AA',
+      // Analytics only switch on for a production deploy *with* an ID, so `analytics.spec.ts`
+      // needs both to prove that consent — not configuration — is what gates gtag.js. The ID is
+      // fake and every request to Google is routed to a local stub, so nothing reaches them.
+      // Note this also silences `project-hero`'s draft badge, which keys off the same variable;
+      // the e2e build is that much closer to the real deploy as a result.
+      NEXT_PUBLIC_DEPLOY_ENV: 'production',
+      NEXT_PUBLIC_GA_MEASUREMENT_ID: 'G-E2ETEST000',
     },
     timeout: 180_000,
   },

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import type { ReactNode } from 'react'
 
+import { Analytics, ConsentBanner, LinkTracker } from '@/components/analytics'
 import { SiteFooter, SiteHeader, SkipLink, ThemeProvider } from '@/components/layout'
 import { MotionProvider } from '@/components/motion'
 import { geistMono, geistSans } from '@/components/shared/fonts'
@@ -61,6 +62,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <Toaster />
           </MotionProvider>
         </ThemeProvider>
+        <ConsentBanner />
+        <LinkTracker />
+        <Analytics />
       </body>
     </html>
   )

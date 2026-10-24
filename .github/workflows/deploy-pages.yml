@@ -45,6 +45,8 @@ jobs:
           NEXT_PUBLIC_EMAIL_API_URL: ${{ vars.NEXT_PUBLIC_EMAIL_API_URL }}
           NEXT_PUBLIC_EMAIL_API_KEY: ${{ vars.NEXT_PUBLIC_EMAIL_API_KEY }}
           NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.NEXT_PUBLIC_TURNSTILE_SITE_KEY }}
+          # GA4. Unset -> analytics stay off and the consent banner has nothing to enable.
+          NEXT_PUBLIC_GA_MEASUREMENT_ID: ${{ vars.NEXT_PUBLIC_GA_MEASUREMENT_ID }}
       - run: touch out/.nojekyll && node scripts/verify-export.mjs
         env:
           VERIFY_STRICT: '0' # agent 3.1 flips this to '1' once sitemap.xml/robots.txt exist

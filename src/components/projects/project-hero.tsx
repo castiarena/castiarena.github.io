@@ -91,6 +91,7 @@ export function ProjectHero({ project }: ProjectHeroProps) {
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
+                data-analytics-content-type="project"
                 className={buttonVariants({ variant: 'outline' })}
               >
                 {link.label}
