@@ -17,7 +17,7 @@
     "compare": "node scripts/compare.mjs"
   },
   "dependencies": {
-    "@hookform/resolvers": "^5.9.1",
+    "@hookform/resolvers": "^6.0.0",
     "@next/third-parties": "16.4.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
